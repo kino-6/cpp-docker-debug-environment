@@ -259,21 +259,113 @@ run_regression_tests() {
     log "INFO" "=== Running Regression Tests ==="
     
     local start_time=$(date +%s)
+    local total_tests=0
+    local passed_tests=0
+    local failed_tests=0
     
-    if [ -f "templates/validation/validate-tasks.sh" ]; then
-        if bash templates/validation/validate-tasks.sh basic-cpp "$OUTPUT_DIR"; then
-            local end_time=$(date +%s)
-            local duration=$((end_time - start_time))
-            log "SUCCESS" "✅ Regression tests completed successfully (${duration}s)"
-            return 0
-        else
-            local end_time=$(date +%s)
-            local duration=$((end_time - start_time))
-            log "FAIL" "❌ Regression tests failed (${duration}s)"
-            return 1
+    # Test all projects
+    local projects=("basic-cpp" "calculator-cpp" "json-parser-cpp")
+    
+    for project in "${projects[@]}"; do
+        log "INFO" "Testing project: $project"
+        
+        local project_path="templates/$project"
+        if [ ! -d "$project_path" ]; then
+            log "FAIL" "Project directory not found: $project_path"
+            failed_tests=$((failed_tests + 1))
+            continue
         fi
+        
+        cd "$project_path"
+        
+        # Clean and rebuild
+        rm -rf build
+        
+        # Configure
+        total_tests=$((total_tests + 1))
+        if cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON >/dev/null 2>&1; then
+            log "PASS" "✅ CMake configure: $project"
+            passed_tests=$((passed_tests + 1))
+        else
+            log "FAIL" "❌ CMake configure: $project"
+            failed_tests=$((failed_tests + 1))
+            cd - >/dev/null
+            continue
+        fi
+        
+        # Build
+        total_tests=$((total_tests + 1))
+        if cmake --build build --parallel >/dev/null 2>&1; then
+            log "PASS" "✅ Build: $project"
+            passed_tests=$((passed_tests + 1))
+        else
+            log "FAIL" "❌ Build: $project"
+            failed_tests=$((failed_tests + 1))
+            cd - >/dev/null
+            continue
+        fi
+        
+        # Find and test executable
+        local executable_names=("BasicCppProject" "CalculatorProject" "JsonParserProject")
+        local found_exec=""
+        
+        for name in "${executable_names[@]}"; do
+            if [ -f "build/bin/$name" ]; then
+                found_exec="$name"
+                break
+            fi
+        done
+        
+        total_tests=$((total_tests + 1))
+        if [ -n "$found_exec" ]; then
+            # Test execution with appropriate arguments
+            case "$found_exec" in
+                "BasicCppProject")
+                    if ./build/bin/$found_exec "RegressionTest" >/dev/null 2>&1; then
+                        log "PASS" "✅ Execution: $project"
+                        passed_tests=$((passed_tests + 1))
+                    else
+                        log "FAIL" "❌ Execution: $project"
+                        failed_tests=$((failed_tests + 1))
+                    fi
+                    ;;
+                "CalculatorProject")
+                    if ./build/bin/$found_exec >/dev/null 2>&1; then
+                        log "PASS" "✅ Execution: $project"
+                        passed_tests=$((passed_tests + 1))
+                    else
+                        log "FAIL" "❌ Execution: $project"
+                        failed_tests=$((failed_tests + 1))
+                    fi
+                    ;;
+                "JsonParserProject")
+                    if ./build/bin/$found_exec --ci >/dev/null 2>&1; then
+                        log "PASS" "✅ Execution: $project"
+                        passed_tests=$((passed_tests + 1))
+                    else
+                        log "FAIL" "❌ Execution: $project"
+                        failed_tests=$((failed_tests + 1))
+                    fi
+                    ;;
+            esac
+        else
+            log "FAIL" "❌ Executable not found: $project"
+            failed_tests=$((failed_tests + 1))
+        fi
+        
+        cd - >/dev/null
+    done
+    
+    local end_time=$(date +%s)
+    local duration=$((end_time - start_time))
+    
+    echo "Regression Tests: $passed_tests/$total_tests passed (${duration}s)" > "$OUTPUT_DIR/regression-test-summary.txt"
+    
+    if [ $failed_tests -eq 0 ]; then
+        log "SUCCESS" "✅ Regression tests completed successfully ($passed_tests/$total_tests passed, ${duration}s)"
+        return 0
     else
-        log "FAIL" "❌ Regression test script not found"
+        log "FAIL" "❌ Regression tests failed ($failed_tests/$total_tests failed, ${duration}s)"
         return 1
     fi
 }
