@@ -1,7 +1,7 @@
 C++ Docker Debug Environment - Test Summary Report
 ==================================================
-Generated: Sat Oct 18 14:11:06 JST 2025
-OS: Linux 5.15.167.4-microsoft-standard-WSL2
+Generated: Sat, Oct 18, 2025  3:23:10 PM
+OS: MINGW64_NT-10.0-26200 3.6.4-b9f03e96.x86_64
 Architecture: x86_64
 
 Test Results:

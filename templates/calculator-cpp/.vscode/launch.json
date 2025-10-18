@@ -38,7 +38,7 @@
             }
         },
         {
-            "name": "Debug Calculator Project (Container)",
+            "name": "Debug Calculator Project (Recommended)",
             "type": "cppdbg",
             "request": "launch",
             "program": "/workspace/build/bin/CalculatorProject",
@@ -60,7 +60,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "CMake Build",
+            "preLaunchTask": "Fresh Configure & Build",
             "miDebuggerPath": "/usr/bin/gdb",
             "logging": {
                 "moduleLoad": false,

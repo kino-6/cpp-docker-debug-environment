@@ -1,17 +1,17 @@
 Docker Environment Test Report
 ==============================
-Generated: Sat Oct 18 14:11:06 JST 2025
+Generated: Sat, Oct 18, 2025  3:23:09 PM
 Project: basic-cpp
-Environment: Linux 5.15.167.4-microsoft-standard-WSL2
+Environment: MINGW64_NT-10.0-26200 3.6.4-b9f03e96.x86_64
 Container: No
 
 Summary:
 Total Tests: 8
 Passed: 8
 Failed: 0
-Success Rate: 100.00%
+Success Rate: 0%
 
 Tools:
-CMake: cmake version 3.22.1
-Ninja: 1.10.1
-GCC: gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0
+CMake: cmake version 4.1.2
+Ninja: 1.13.1
+GCC: gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-Builds project) 15.2.0

@@ -59,7 +59,7 @@
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
-            "name": "Debug JSON Parser (Container)",
+            "name": "Debug JSON Parser (Recommended)",
             "type": "cppdbg",
             "request": "launch",
             "program": "/workspace/build/bin/JsonParserProject",
@@ -81,7 +81,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "CMake Build",
+            "preLaunchTask": "Fresh Configure & Build",
             "miDebuggerPath": "/usr/bin/gdb",
             "logging": {
                 "moduleLoad": false,

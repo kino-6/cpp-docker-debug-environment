@@ -2,47 +2,26 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Basic C++ Project (Recommended)",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["DebugTest"],
-            "stopAtEntry": false,
-            "cwd": "/workspace",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "Fresh Configure & Build",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
             "name": "Quick Debug (No Build)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/workspace/build/bin/BasicCppProject",
+            "program": "${workspaceFolder}/build/bin/BasicCppProject.exe",
             "args": ["QuickDebug"],
             "stopAtEntry": false,
-            "cwd": "/workspace",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "C:/ProgramData/mingw64/mingw64/bin/gdb.exe"
         },
         {
             "name": "Debug Basic C++ Project",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/workspace/build/bin/BasicCppProject",
+            "program": "${workspaceFolder}/build/bin/BasicCppProject.exe",
             "args": ["DebugTest"],
             "stopAtEntry": false,
-            "cwd": "/workspace",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -58,8 +37,8 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Fresh Configure & Build",
-            "miDebuggerPath": "/usr/bin/gdb",
+            // "preLaunchTask": "CMake Build",  // Commented out for faster debugging
+            "miDebuggerPath": "C:/ProgramData/mingw64/mingw64/bin/gdb.exe",
             "logging": {
                 "moduleLoad": false,
                 "trace": false,
@@ -69,31 +48,24 @@
             }
         },
         {
-            "name": "Debug Basic C++ Project (Auto Build)",
+            "name": "Debug Basic C++ Project (Simple)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["AutoBuild"],
-            "stopAtEntry": false,
-            "cwd": "/workspace",
+            "program": "${workspaceFolder}/build/bin/BasicCppProject.exe",
+            "args": ["DebugTest"],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "Fresh Configure & Build",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "C:/ProgramData/mingw64/mingw64/bin/gdb.exe",
+            "preLaunchTask": "CMake Build"
         },
         {
             "name": "Attach to Process",
             "type": "cppdbg",
             "request": "attach",
-            "program": "/workspace/build/bin/BasicCppProject",
+            "program": "${workspaceFolder}/build/bin/BasicCppProject.exe",
             "processId": "${command:pickProcess}",
             "MIMode": "gdb",
             "setupCommands": [
@@ -103,7 +75,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "C:/ProgramData/mingw64/mingw64/bin/gdb.exe"
         }
     ]
 }

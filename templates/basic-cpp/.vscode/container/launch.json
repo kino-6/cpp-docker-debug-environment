@@ -2,32 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Basic C++ Project (Recommended)",
+            "name": "Quick Debug Container (No Build)",
             "type": "cppdbg",
             "request": "launch",
             "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["DebugTest"],
-            "stopAtEntry": false,
-            "cwd": "/workspace",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "Fresh Configure & Build",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
-            "name": "Quick Debug (No Build)",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["QuickDebug"],
+            "args": ["QuickDebugContainer"],
             "stopAtEntry": false,
             "cwd": "/workspace",
             "environment": [],
@@ -36,11 +15,11 @@
             "miDebuggerPath": "/usr/bin/gdb"
         },
         {
-            "name": "Debug Basic C++ Project",
+            "name": "Debug Basic C++ Project (Container)",
             "type": "cppdbg",
             "request": "launch",
             "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["DebugTest"],
+            "args": ["ContainerDebugTest"],
             "stopAtEntry": false,
             "cwd": "/workspace",
             "environment": [],
@@ -58,7 +37,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "Fresh Configure & Build",
+            // "preLaunchTask": "Fresh Configure & Build",  // Commented out for faster debugging
             "miDebuggerPath": "/usr/bin/gdb",
             "logging": {
                 "moduleLoad": false,
@@ -73,7 +52,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/workspace/build/bin/BasicCppProject",
-            "args": ["AutoBuild"],
+            "args": ["AutoBuildContainer"],
             "stopAtEntry": false,
             "cwd": "/workspace",
             "environment": [],
@@ -87,22 +66,6 @@
                 }
             ],
             "preLaunchTask": "Fresh Configure & Build",
-            "miDebuggerPath": "/usr/bin/gdb"
-        },
-        {
-            "name": "Attach to Process",
-            "type": "cppdbg",
-            "request": "attach",
-            "program": "/workspace/build/bin/BasicCppProject",
-            "processId": "${command:pickProcess}",
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
             "miDebuggerPath": "/usr/bin/gdb"
         }
     ]

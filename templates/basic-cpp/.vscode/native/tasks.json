@@ -115,8 +115,7 @@
         {
             "label": "Run Application",
             "type": "shell",
-            "command": "./build/bin/JsonParserProject",
-            "args": ["--ci"],
+            "command": "./build/bin/BasicCppProject.exe",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -129,75 +128,25 @@
             "dependsOn": "CMake Build"
         },
         {
-            "label": "Run Application (Interactive)",
+            "label": "Quick Build (if needed)",
             "type": "shell",
-            "command": "./build/bin/JsonParserProject",
-            "args": ["--interactive"],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "dependsOn": "CMake Build"
-        },
-        {
-            "label": "Clean Build Directory",
-            "type": "shell",
-            "command": "rm",
+            "command": "cmake",
             "args": [
-                "-rf",
-                "build"
+                "--build",
+                "build",
+                "--config",
+                "Debug"
             ],
             "group": "build",
             "presentation": {
-                "echo": true,
-                "reveal": "always",
+                "echo": false,
+                "reveal": "silent",
                 "focus": false,
                 "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Fresh Configure & Build",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
+                "showReuseMessage": false,
                 "clear": false
             },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": ["relative", "${workspaceFolder}"],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
+            "problemMatcher": []
         }
     ]
 }
