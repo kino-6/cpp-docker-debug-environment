@@ -1,0 +1,50 @@
+{
+  "templates": [
+    {
+      "id": "basic-cpp",
+      "name": "Basic C++ Project",
+      "description": "Simple Hello World C++ project with CMake and debugging support",
+      "category": "basic",
+      "difficulty": "beginner",
+      "features": [
+        "CMake build system",
+        "GDB debugging",
+        "VSCode integration"
+      ],
+      "path": "basic-cpp"
+    },
+    {
+      "id": "calculator-cpp",
+      "name": "Calculator C++ Project",
+      "description": "Calculator library demonstrating header/source separation and library creation",
+      "category": "basic",
+      "difficulty": "beginner",
+      "features": [
+        "Header/source separation",
+        "Static library creation",
+        "Error handling",
+        "Interactive console application"
+      ],
+      "path": "calculator-cpp"
+    },
+    {
+      "id": "json-parser-cpp",
+      "name": "JSON Parser C++ Project",
+      "description": "JSON parser using nlohmann/json library to demonstrate external dependency management",
+      "category": "basic",
+      "difficulty": "intermediate",
+      "features": [
+        "External library integration",
+        "FetchContent CMake feature",
+        "File I/O operations",
+        "JSON parsing and manipulation"
+      ],
+      "path": "json-parser-cpp"
+    }
+  ],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2024-01-01",
+    "description": "Basic C++ project templates for VSCode Docker development environment"
+  }
+}

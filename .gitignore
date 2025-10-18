@@ -1,0 +1,83 @@
+# Build directories
+build/
+build-*/
+**/build/
+**/build-*/
+
+# Exception: Keep build-scripts directory
+!templates/build-scripts/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Compiled binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# IDE files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/c_cpp_properties.json
+*.vcxproj*
+*.sln
+*.suo
+*.user
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+build-log-*.txt
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Package managers
+node_modules/
+.npm/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+
+# Rust
+target/
+Cargo.lock
+
+# Go
+*.exe~
+*.test
+*.prof
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Dependencies downloaded by CMake
+_deps/
