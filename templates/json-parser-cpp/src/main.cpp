@@ -73,8 +73,11 @@ bool loadJsonFromFile(const std::string& filename, json& j) {
     }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::cout << "JSON Parser Demo" << std::endl;
+    
+    // CI/CD friendly: Skip interactive mode if --ci flag is provided
+    bool ciMode = (argc > 1 && std::string(argv[1]) == "--ci");
     
     // Try to load sample JSON file
     json j;
@@ -100,8 +103,18 @@ int main() {
         printJsonInfo(j);
     }
     
-    // Interactive JSON input (only if stdin is a terminal)
-    if (isatty(STDIN_FILENO)) {
+    // Check for interactive mode - only enable if explicitly requested
+    bool interactiveMode = false;
+    
+    // Interactive mode only if:
+    // 1. Not in CI mode AND
+    // 2. Explicitly requested with --interactive flag AND  
+    // 3. stdin is a terminal
+    if (!ciMode && argc > 1 && std::string(argv[1]) == "--interactive" && isatty(STDIN_FILENO)) {
+        interactiveMode = true;
+    }
+    
+    if (interactiveMode) {
         std::cout << "\n=== Interactive Mode ===" << std::endl;
         std::cout << "Enter a JSON string (or 'quit' to exit): ";
         
@@ -121,8 +134,13 @@ int main() {
             std::getline(std::cin, input);
         }
     } else {
-        std::cout << "\n=== Non-interactive mode ===" << std::endl;
+        std::cout << "\n=== Non-interactive mode (CI/CD friendly) ===" << std::endl;
         std::cout << "JSON Parser completed successfully!" << std::endl;
+        if (ciMode) {
+            std::cout << "Running in CI/CD mode." << std::endl;
+        } else {
+            std::cout << "Use --interactive flag to enable interactive mode." << std::endl;
+        }
     }
     
     std::cout << "Thank you for using the JSON parser!" << std::endl;

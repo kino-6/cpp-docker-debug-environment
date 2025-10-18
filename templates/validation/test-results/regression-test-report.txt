@@ -1,0 +1,22 @@
+﻿Regression Test Report
+======================
+Generated: 10/18/2025 13:55:50
+Test Type: CI/CD Compatibility Regression Test
+
+Summary:
+Total Tests: 3
+Passed: 3
+Failed: 0
+Success Rate: 100%
+
+Detailed Results:
+basic-cpp - PASS: Executed successfully
+calculator-cpp - PASS: Executed successfully
+json-parser-cpp - PASS: Executed successfully
+
+Test Environment:
+OS: Microsoft Windows NT 10.0.26200.0
+PowerShell: 5.1.26100.6899
+CMake: cmake version 4.1.2
+Ninja: 1.13.1
+GCC: gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-Builds project) 15.2.0

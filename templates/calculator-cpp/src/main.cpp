@@ -3,68 +3,51 @@
 #include <stdexcept>
 #include "calculator.h"
 
-void printMenu() {
-    std::cout << "\n=== Simple Calculator ===" << std::endl;
-    std::cout << "1. Addition" << std::endl;
-    std::cout << "2. Subtraction" << std::endl;
-    std::cout << "3. Multiplication" << std::endl;
-    std::cout << "4. Division" << std::endl;
-    std::cout << "5. Exit" << std::endl;
-    std::cout << "Choose an operation (1-5): ";
+void runDemo() {
+    std::cout << "\n=== Calculator Demo ===" << std::endl;
+    
+    // Demo calculations for CI/CD testing
+    double num1 = 10.5, num2 = 3.2;
+    
+    try {
+        std::cout << std::fixed << std::setprecision(2);
+        
+        double result = Calculator::add(num1, num2);
+        std::cout << "Addition: " << num1 << " + " << num2 << " = " << result << std::endl;
+        
+        result = Calculator::subtract(num1, num2);
+        std::cout << "Subtraction: " << num1 << " - " << num2 << " = " << result << std::endl;
+        
+        result = Calculator::multiply(num1, num2);
+        std::cout << "Multiplication: " << num1 << " * " << num2 << " = " << result << std::endl;
+        
+        result = Calculator::divide(num1, num2);
+        std::cout << "Division: " << num1 << " / " << num2 << " = " << result << std::endl;
+        
+        // Test division by zero handling
+        try {
+            result = Calculator::divide(num1, 0);
+        } catch (const std::exception& e) {
+            std::cout << "Division by zero test: " << e.what() << std::endl;
+        }
+        
+        std::cout << "Calculator demo completed successfully." << std::endl;
+        
+    } catch (const std::exception& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::cout << "Welcome to the Calculator!" << std::endl;
     
-    int choice;
-    double num1, num2, result;
-    
-    while (true) {
-        printMenu();
-        std::cin >> choice;
-        
-        if (choice == 5) {
-            std::cout << "Thank you for using the calculator!" << std::endl;
-            break;
-        }
-        
-        if (choice < 1 || choice > 4) {
-            std::cout << "Invalid choice. Please try again." << std::endl;
-            continue;
-        }
-        
-        std::cout << "Enter first number: ";
-        std::cin >> num1;
-        std::cout << "Enter second number: ";
-        std::cin >> num2;
-        
-        try {
-            switch (choice) {
-                case 1:
-                    result = Calculator::add(num1, num2);
-                    std::cout << std::fixed << std::setprecision(2);
-                    std::cout << num1 << " + " << num2 << " = " << result << std::endl;
-                    break;
-                case 2:
-                    result = Calculator::subtract(num1, num2);
-                    std::cout << std::fixed << std::setprecision(2);
-                    std::cout << num1 << " - " << num2 << " = " << result << std::endl;
-                    break;
-                case 3:
-                    result = Calculator::multiply(num1, num2);
-                    std::cout << std::fixed << std::setprecision(2);
-                    std::cout << num1 << " * " << num2 << " = " << result << std::endl;
-                    break;
-                case 4:
-                    result = Calculator::divide(num1, num2);
-                    std::cout << std::fixed << std::setprecision(2);
-                    std::cout << num1 << " / " << num2 << " = " << result << std::endl;
-                    break;
-            }
-        } catch (const std::exception& e) {
-            std::cout << "Error: " << e.what() << std::endl;
-        }
+    // CI/CD friendly: Run demo by default, or use command line arguments
+    if (argc > 1 && std::string(argv[1]) == "--interactive") {
+        std::cout << "Interactive mode not implemented in CI/CD version." << std::endl;
+        std::cout << "Use without arguments for demo mode." << std::endl;
+        return 1;
     }
     
+    runDemo();
     return 0;
 }

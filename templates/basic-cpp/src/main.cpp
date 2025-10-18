@@ -1,16 +1,18 @@
 #include <iostream>
 #include <string>
 
-int main() {
+int main(int argc, char* argv[]) {
     std::cout << "Hello, World!" << std::endl;
     
-    std::string name;
-    std::cout << "Enter your name: ";
-    std::getline(std::cin, name);
+    // CI/CD friendly: Use command line argument or default name
+    std::string name = "Developer";
     
-    if (!name.empty()) {
-        std::cout << "Hello, " << name << "!" << std::endl;
+    if (argc > 1) {
+        name = argv[1];
     }
+    
+    std::cout << "Hello, " << name << "!" << std::endl;
+    std::cout << "Basic C++ application executed successfully." << std::endl;
     
     return 0;
 }
