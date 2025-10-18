@@ -1,0 +1,45 @@
+{
+    "name": "ARM Embedded Development",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "C_Cpp.default.compilerPath": "/usr/bin/arm-none-eabi-gcc",
+                "C_Cpp.default.cStandard": "c17",
+                "C_Cpp.default.cppStandard": "c++17",
+                "C_Cpp.default.intelliSenseMode": "gcc-arm",
+                "cmake.configureOnOpen": false,
+                "cmake.buildDirectory": "${workspaceFolder}/build",
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/bin/bash",
+                        "args": ["-l"]
+                    }
+                }
+            },
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "twxs.cmake"
+            ]
+        }
+    },
+    
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y bash-completion && sudo chsh -s /bin/bash vscode && echo 'ARM Embedded Dev Container ready! Bash with tab completion enabled.'",
+    
+    "remoteUser": "vscode",
+    
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt", "apparmor=unconfined"
+    ],
+    
+    // Set default shell to bash
+    "containerEnv": {
+        "SHELL": "/bin/bash"
+    }
+}

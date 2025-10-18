@@ -1,0 +1,348 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "ARM: CMake Configure",
+            "type": "shell",
+            "command": "cmake",
+            "options": {
+                "shell": {
+                    "executable": "C:\\Program Files\\Git\\bin\\bash.exe",
+                    "args": ["-c"]
+                }
+            },
+            "args": [
+                "-B",
+                "build",
+                "-S",
+                ".",
+                "-G",
+                "Ninja",
+                "-DCMAKE_BUILD_TYPE=Debug",
+                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "cmake",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": {
+                        "regexp": "^CMake Error at (.*):(\\d+)\\s+\\((.*)\\):$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 3
+                    }
+                }
+            ]
+        },
+        {
+            "label": "ARM: CMake Build",
+            "type": "shell",
+            "command": "cmake",
+            "options": {
+                "shell": {
+                    "executable": "C:\\Program Files\\Git\\bin\\bash.exe",
+                    "args": ["-c"]
+                }
+            },
+            "args": [
+                "--build",
+                "build",
+                "--config",
+                "Debug",
+                "--parallel"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ],
+            "dependsOn": "ARM: CMake Configure"
+        },
+        {
+            "label": "ARM: Clean Build Directory",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "build"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "ARM: Fresh Configure & Build",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "ARM: Show Binary Info",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Binary Information ===' && arm-none-eabi-size build/bin/EmbeddedArmProject.elf && echo '=== Generated Files ===' && ls -la build/bin/"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOn": "ARM: CMake Build"
+        },
+        {
+            "label": "ARM: Test QEMU Execution",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Building ARM Project ===' && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel && echo '=== Testing QEMU Execution ===' && timeout 5s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic || echo 'QEMU test completed (timeout after 5 seconds)'"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "ARM: Start QEMU Debug Server",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Starting QEMU Debug Server ===' && qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic -gdb tcp::1234 -S"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "isBackground": true,
+            "dependsOn": "ARM: Fresh Configure & Build"
+        },
+        {
+            "label": "Test: Build Native Unit Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Test: Run Native Unit Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && rm -rf build && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Running Unit Tests ===' && ls -la build/bin/ && ./build/bin/UnitTestRunner"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: arm-none-eabi-gcc build active file",
+            "command": "/usr/bin/arm-none-eabi-gcc",
+            "args": [
+                "-mcpu=cortex-m4",
+                "-mthumb",
+                "-Wall",
+                "-Wextra",
+                "-Og",
+                "-g3",
+                "-fdiagnostics-color=always",
+                "-I${workspaceFolder}/include",
+                "-I${workspaceFolder}/src/hal",
+                "-I${workspaceFolder}/src/drivers",
+                "${file}",
+                "${workspaceFolder}/src/hal/system_init.c",
+                "${workspaceFolder}/src/hal/gpio.c", 
+                "${workspaceFolder}/src/drivers/led.c",
+                "${workspaceFolder}/src/startup/startup_stm32f4xx.s",
+                "-specs=nosys.specs",
+                "-T${workspaceFolder}/linker/STM32F407VGTx_FLASH.ld",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.elf"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "detail": "ARM GCC build with all source files and linker script"
+        }
+    ]
+}
