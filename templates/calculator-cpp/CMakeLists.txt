@@ -13,12 +13,27 @@ endif()
 # Add compile options for better debugging and warnings
 if(MSVC)
     add_compile_options(/W4 /MP)  # /MP enables parallel compilation
+    # Debug symbols for MSVC
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_options(/Zi /Od)  # Full debug info, no optimization
+        add_link_options(/DEBUG:FULL)
+    endif()
     # Set maximum parallel processes for MSVC
     if(NOT DEFINED CMAKE_VS_GLOBALS)
         set(CMAKE_VS_GLOBALS "UseMultiToolTask=true")
     endif()
 else()
-    add_compile_options(-Wall -Wextra -g)
+    add_compile_options(-Wall -Wextra)
+    # Enhanced debug symbols for GCC/Clang
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        add_compile_options(-g3 -O0 -fno-omit-frame-pointer)
+        # Additional debug information
+        add_compile_options(-ggdb -gdwarf-4)
+        # Disable optimizations that interfere with debugging
+        add_compile_options(-fno-inline -fno-eliminate-unused-debug-types)
+    else()
+        add_compile_options(-g)
+    endif()
     # Enable parallel compilation for GCC/Clang
     if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.12")
         include(ProcessorCount)

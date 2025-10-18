@@ -3,6 +3,7 @@
 ## 🚀 One-Command Testing
 
 ### Windows (PowerShell)
+
 ```powershell
 # Run all tests
 .\run-tests.ps1
@@ -27,6 +28,7 @@
 ```
 
 ### Linux/macOS (Bash)
+
 ```bash
 # Run all tests
 ./run-tests.sh
@@ -59,6 +61,7 @@
 ## 📁 Output
 
 All test results are saved to `test-results/` directory:
+
 - `test-summary.txt` - Overall test summary
 - `*-report.txt` - Detailed test reports
 - `*.log` - Detailed execution logs
@@ -66,6 +69,7 @@ All test results are saved to `test-results/` directory:
 ## ✅ Expected Results
 
 ### Successful Run
+
 ```
 [2025-10-18 14:05:00] [SUCCESS] 🎉 All tests completed successfully!
 
@@ -79,7 +83,9 @@ Overall Result: ✅ SUCCESS
 ```
 
 ### Prerequisites Check
+
 The test runner automatically checks for:
+
 - ✅ CMake (required for builds)
 - ✅ Ninja (build system)
 - ✅ GCC (compiler)
@@ -91,6 +97,7 @@ The test runner automatically checks for:
 ### Common Issues
 
 #### 1. CMake not found
+
 ```bash
 # Windows (with Chocolatey)
 choco install cmake
@@ -103,6 +110,7 @@ brew install cmake
 ```
 
 #### 2. Ninja not found
+
 ```bash
 # Windows (with Chocolatey)
 choco install ninja
@@ -115,6 +123,7 @@ brew install ninja
 ```
 
 #### 3. GCC not found
+
 ```bash
 # Windows (MinGW-w64)
 choco install mingw
@@ -127,6 +136,7 @@ xcode-select --install
 ```
 
 #### 4. WSL not available (Windows only)
+
 ```powershell
 # Enable WSL2
 wsl --install
@@ -135,6 +145,7 @@ wsl --install
 ### Test Failures
 
 If tests fail, check the detailed reports in `test-results/`:
+
 1. Look at `test-summary.txt` for overview
 2. Check specific `*-report.txt` files for details
 3. Review `*.log` files for execution details
@@ -142,6 +153,7 @@ If tests fail, check the detailed reports in `test-results/`:
 ## 🎯 CI/CD Integration
 
 ### GitHub Actions
+
 ```yaml
 name: Test C++ Environment
 on: [push, pull_request]
@@ -156,6 +168,7 @@ jobs:
 ```
 
 ### Jenkins
+
 ```groovy
 pipeline {
     agent any
@@ -172,22 +185,26 @@ pipeline {
 ## 📋 What Gets Tested
 
 ### Quick Tests
+
 - ✅ Project structure validation
 - ✅ VSCode tasks.json files
 - ✅ Basic CMake build
 
 ### Regression Tests
+
 - ✅ All project builds (basic-cpp, calculator-cpp, json-parser-cpp)
 - ✅ Application execution (CI/CD mode)
 - ✅ compile_commands.json generation
 - ✅ Error handling
 
 ### Docker Tests
+
 - ✅ WSL2/Linux environment
 - ✅ Build tools availability
 - ✅ Cross-platform compatibility
 
 ### Dev Container Tests
+
 - ✅ devcontainer.json validation
 - ✅ Dockerfile validation
 - ✅ VSCode integration settings
@@ -195,6 +212,7 @@ pipeline {
 ## 🎉 Success Criteria
 
 All tests pass when:
+
 - ✅ Projects build successfully
 - ✅ Applications run without input waiting
 - ✅ VSCode integration files are present

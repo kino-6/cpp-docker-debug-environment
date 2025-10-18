@@ -1,17 +1,14 @@
-﻿C++ Docker Debug Environment - Test Summary Report
+C++ Docker Debug Environment - Test Summary Report
 ==================================================
-Generated: 2025-10-18 14:07:06
-Environment: Microsoft Windows NT 10.0.26200.0
-PowerShell: 5.1.26100.6899
-Total Duration: 1.58 seconds
-
-Prerequisites:
-  Ninja: True   WSL: True   CMake: True   GCC: True   Docker: False -join "
-"
+Generated: Sat Oct 18 14:11:06 JST 2025
+OS: Linux 5.15.167.4-microsoft-standard-WSL2
+Architecture: x86_64
 
 Test Results:
-  Quick Tests: 笶・FAIL (1.58s)
+  Quick Tests: ✅ PASS
+  Regression Tests: ✅ PASS
+  Docker Tests: ✅ PASS
 
-Overall Result: 笨・SUCCESS
+Overall Result: ✅ SUCCESS
 
 Detailed reports available in: test-results

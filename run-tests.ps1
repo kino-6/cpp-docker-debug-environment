@@ -332,6 +332,36 @@ function Invoke-DevContainerTests {
     }
 }
 
+function Invoke-EnvironmentValidation {
+    Write-ColorLog "=== Running Environment Validation (Task 6) ===" "INFO"
+    
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    
+    try {
+        if (Test-Path "templates/validation/environment-validation.ps1") {
+            $result = & "templates/validation/environment-validation.ps1" -OutputDir $OutputDir
+            $success = $LASTEXITCODE -eq 0
+            
+            if ($success) {
+                Write-ColorLog "✅ Environment validation completed successfully" "PASS"
+            } else {
+                Write-ColorLog "❌ Environment validation failed" "FAIL"
+            }
+            
+            return @{
+                Success = $success
+                Duration = $stopwatch.Elapsed.TotalSeconds
+                ExitCode = $LASTEXITCODE
+            }
+        } else {
+            Write-ColorLog "❌ Environment validation script not found" "FAIL"
+            return @{ Success = $false; Duration = 0; ExitCode = -1 }
+        }
+    } finally {
+        $stopwatch.Stop()
+    }
+}
+
 function Generate-SummaryReport {
     param($TestResults, $Environment, $Prerequisites)
     
@@ -409,6 +439,11 @@ function Main {
     
     if ($DevContainer -or $runAll) {
         $testResults["Dev Container Tests"] = Invoke-DevContainerTests
+    }
+    
+    # Add Task 6 Environment Validation
+    if ($runAll) {
+        $testResults["Environment Validation"] = Invoke-EnvironmentValidation
     }
     
     # Generate summary report

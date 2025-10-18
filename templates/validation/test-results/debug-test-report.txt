@@ -1,0 +1,52 @@
+﻿Debug Configuration Test Report
+===============================
+Generated: 10/18/2025 14:16:06
+Test Environment: Windows PowerShell
+
+Summary:
+Total Tests: 34
+Passed: 34
+Failed: 0
+Success Rate: 100%
+
+Detailed Results:
+basic-cpp launch.json - PASS
+basic-cpp JSON syntax - PASS
+basic-cpp debug configs - PASS
+basic-cpp config 'Debug Basic C++ Project' - PASS
+basic-cpp config 'Debug Basic C++ Project (Container)' - PASS
+basic-cpp config 'Attach to Process' - PASS
+basic-cpp debug configure - PASS
+basic-cpp debug build - PASS
+basic-cpp debug executable - PASS
+basic-cpp debug execution - PASS
+calculator-cpp launch.json - PASS
+calculator-cpp JSON syntax - PASS
+calculator-cpp debug configs - PASS
+calculator-cpp config 'Debug Calculator Project' - PASS
+calculator-cpp config 'Debug Calculator Project (Container)' - PASS
+calculator-cpp config 'Debug Calculator with Breakpoint Test' - PASS
+calculator-cpp debug configure - PASS
+calculator-cpp debug build - PASS
+calculator-cpp debug executable - PASS
+calculator-cpp debug execution - PASS
+json-parser-cpp launch.json - PASS
+json-parser-cpp JSON syntax - PASS
+json-parser-cpp debug configs - PASS
+json-parser-cpp config 'Debug JSON Parser Project' - PASS
+json-parser-cpp config 'Debug JSON Parser (Interactive Mode)' - PASS
+json-parser-cpp config 'Debug JSON Parser (Container)' - PASS
+json-parser-cpp config 'Debug JSON Parser with Breakpoints' - PASS
+json-parser-cpp debug configure - PASS
+json-parser-cpp debug build - PASS
+json-parser-cpp debug executable - PASS
+json-parser-cpp debug execution - PASS
+Breakpoint test file - PASS
+Breakpoint test compile - PASS
+Breakpoint test execution - PASS
+
+Environment Information:
+OS: Microsoft Windows NT 10.0.26200.0
+PowerShell: 5.1.26100.6899
+GCC: gcc.exe (x86_64-posix-seh-rev0, Built by MinGW-Builds project) 15.2.0
+GDB: GNU gdb (GDB) 16.3

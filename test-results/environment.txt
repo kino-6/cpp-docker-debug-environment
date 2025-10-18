@@ -1,0 +1,4 @@
+OS: Linux
+Kernel: 5.15.167.4-microsoft-standard-WSL2
+Architecture: x86_64
+Date: Sat Oct 18 14:09:23 JST 2025
