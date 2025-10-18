@@ -38,9 +38,25 @@ refreshenv
 
 ### 2. テンプレートの使用
 
+#### Option A: Dev Container (推奨)
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-username/cpp-docker-debug-environment.git
+git clone https://github.com/kino-6/cpp-docker-debug-environment.git
+cd cpp-docker-debug-environment
+
+# VSCodeで開く
+code templates/basic-cpp
+
+# Dev Containerで再開 (Ctrl+Shift+P -> "Dev Containers: Reopen in Container")
+# コンテナ内でビルド・実行
+cmake -S . -B build -G Ninja && cmake --build build
+./build/bin/BasicCppProject
+```
+
+#### Option B: ローカル開発
+```bash
+# リポジトリをクローン
+git clone https://github.com/kino-6/cpp-docker-debug-environment.git
 cd cpp-docker-debug-environment
 
 # Basic C++テンプレートでテスト
@@ -140,6 +156,8 @@ cd templates/basic-cpp
 
 - [パフォーマンス詳細](templates/PERFORMANCE.md)
 - [システム要件](templates/REQUIREMENTS.md)
+- [Dev Container要件](templates/DEVCONTAINER_REQUIREMENTS.md)
+- [Dev Container使用方法](templates/DEVCONTAINER.md)
 - [テンプレート一覧](templates/README.md)
 - [仕様書](/.kiro/specs/cpp-docker-debug-environment/)
 

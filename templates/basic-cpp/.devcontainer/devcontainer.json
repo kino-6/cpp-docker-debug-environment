@@ -1,0 +1,64 @@
+{
+    "name": "Basic C++ Development",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    
+    // Features to add to the dev container
+    "features": {},
+    
+    // Configure tool-specific properties
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+                "C_Cpp.default.cStandard": "c17",
+                "C_Cpp.default.cppStandard": "c++17",
+                "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+                "cmake.configureOnOpen": true,
+                "cmake.buildDirectory": "${workspaceFolder}/build",
+                "files.associations": {
+                    "*.h": "c",
+                    "*.hpp": "cpp"
+                }
+            },
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cmake-tools",
+                "twxs.cmake",
+                "ms-vscode.makefile-tools"
+            ]
+        }
+    },
+    
+    // Use 'forwardPorts' to make a list of ports inside the container available locally
+    "forwardPorts": [],
+    
+    // Use 'postCreateCommand' to run commands after the container is created
+    "postCreateCommand": "echo 'Dev container ready! Run: cmake -S . -B build && cmake --build build' > /tmp/welcome.txt && cat /tmp/welcome.txt",
+    
+    // Configure container user
+    "remoteUser": "vscode",
+    
+    // Mount the workspace with optimized settings for WSL2
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+    "workspaceFolder": "/workspace",
+    
+    // WSL2 performance optimizations
+    "mounts": [
+        "source=/tmp,target=/tmp,type=bind,consistency=cached"
+    ],
+    
+    // Container environment variables
+    "containerEnv": {
+        "MAKEFLAGS": "-j$(nproc)"
+    },
+    
+    // Run arguments for the container
+    "runArgs": [
+        "--cap-add=SYS_PTRACE",
+        "--security-opt", "seccomp=unconfined"
+    ]
+}

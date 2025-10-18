@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <unistd.h>  // for isatty
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -99,24 +100,29 @@ int main() {
         printJsonInfo(j);
     }
     
-    // Interactive JSON input
-    std::cout << "\n=== Interactive Mode ===" << std::endl;
-    std::cout << "Enter a JSON string (or 'quit' to exit): ";
-    
-    std::string input;
-    std::getline(std::cin, input);
-    
-    while (input != "quit") {
-        try {
-            json userJson = json::parse(input);
-            std::cout << "Parsed JSON:" << std::endl;
-            std::cout << userJson.dump(2) << std::endl;
-        } catch (const json::parse_error& e) {
-            std::cout << "Invalid JSON: " << e.what() << std::endl;
-        }
-        
+    // Interactive JSON input (only if stdin is a terminal)
+    if (isatty(STDIN_FILENO)) {
+        std::cout << "\n=== Interactive Mode ===" << std::endl;
         std::cout << "Enter a JSON string (or 'quit' to exit): ";
+        
+        std::string input;
         std::getline(std::cin, input);
+        
+        while (input != "quit" && !input.empty()) {
+            try {
+                json userJson = json::parse(input);
+                std::cout << "Parsed JSON:" << std::endl;
+                std::cout << userJson.dump(2) << std::endl;
+            } catch (const json::parse_error& e) {
+                std::cout << "Invalid JSON: " << e.what() << std::endl;
+            }
+            
+            std::cout << "Enter a JSON string (or 'quit' to exit): ";
+            std::getline(std::cin, input);
+        }
+    } else {
+        std::cout << "\n=== Non-interactive mode ===" << std::endl;
+        std::cout << "JSON Parser completed successfully!" << std::endl;
     }
     
     std::cout << "Thank you for using the JSON parser!" << std::endl;

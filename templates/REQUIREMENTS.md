@@ -87,24 +87,37 @@ xcode-select --install
 brew install cmake ninja
 ```
 
+## Development Environment Options
+
+### Option 1: Dev Container (Recommended)
+- **Requirements**: Docker Desktop + VSCode + Dev Containers extension
+- **Advantages**: Consistent environment, 20-24% faster builds, zero configuration
+- **Build Performance**: 2.4s (Basic/Calculator), 7.7s (JSON Parser)
+- **See**: [DEVCONTAINER_REQUIREMENTS.md](DEVCONTAINER_REQUIREMENTS.md) for detailed requirements
+
+### Option 2: Local Development
+- **Requirements**: Local installation of compilers and tools
+- **Advantages**: No Docker overhead, direct host access
+- **Build Performance**: 3.0s (Basic/Calculator), 10.2s (JSON Parser)
+
 ## Template-Specific Requirements
 
 ### Basic C++ Template
 
 - **Dependencies**: None (standard library only)
-- **Build Time**: ~3 seconds
+- **Build Time**: ~2.4s (Dev Container) / ~3.0s (Local)
 - **Memory Usage**: ~500MB during build
 
 ### Calculator C++ Template
 
 - **Dependencies**: None (standard library only)
-- **Build Time**: ~3 seconds
+- **Build Time**: ~2.4s (Dev Container) / ~3.0s (Local)
 - **Memory Usage**: ~600MB during build
 
 ### JSON Parser C++ Template
 
 - **Dependencies**: nlohmann/json (auto-downloaded)
-- **Build Time**: ~10 seconds (first build), ~2 seconds (incremental)
+- **Build Time**: ~7.7s (Dev Container) / ~10.2s (Local)
 - **Memory Usage**: ~1.5GB during build
 - **Network**: Required for initial dependency download
 
