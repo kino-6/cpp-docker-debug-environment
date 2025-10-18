@@ -18,8 +18,11 @@
                 "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
                 "C_Cpp.default.includePath": [
                     "${workspaceFolder}/src",
-                    "${workspaceFolder}/build/_deps/nlohmann_json-src/include"
+                    "${workspaceFolder}/build/_deps/*/include",
+                    "/usr/include",
+                    "/usr/local/include"
                 ],
+                "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
                 "cmake.configureOnOpen": true,
                 "cmake.buildDirectory": "${workspaceFolder}/build",
                 "files.associations": {

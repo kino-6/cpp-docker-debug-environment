@@ -4,8 +4,8 @@ FROM ubuntu:22.04
 # Avoid prompts from apt
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies and development tools
-RUN apt-get update && apt-get install -y \
+# Install system dependencies and development tools in a single layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
     # Essential build tools
     build-essential \
     gcc \
@@ -20,36 +20,36 @@ RUN apt-get update && apt-get install -y \
     lldb \
     # Version control
     git \
-    # Utilities
+    # Utilities (minimal set)
     curl \
     wget \
     unzip \
-    zip \
-    # Text editors (for emergency editing)
+    # Text editors (lightweight)
     nano \
-    vim \
     # Process tools
     htop \
-    # Network tools
+    # Network tools (minimal)
     net-tools \
-    # Clean up
+    # Certificate management
+    ca-certificates \
+    # Sudo for non-root user
+    sudo \
+    # Clean up in same layer to reduce image size
     && apt-get autoremove -y \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /var/tmp/*
 
-# Create a non-root user
+# Create a non-root user (combine with sudo installation above to reduce layers)
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
-    && apt-get update \
-    && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
-    && chmod 0440 /etc/sudoers.d/$USERNAME \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
 # Set up workspace directory
 WORKDIR /workspace

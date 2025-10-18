@@ -28,7 +28,8 @@
                 "ms-vscode.cpptools-extension-pack",
                 "ms-vscode.cmake-tools",
                 "twxs.cmake",
-                "ms-vscode.makefile-tools"
+                "ms-vscode.makefile-tools",
+                "vadimcn.vscode-lldb"
             ]
         }
     },
@@ -59,6 +60,6 @@
     // Run arguments for the container
     "runArgs": [
         "--cap-add=SYS_PTRACE",
-        "--security-opt", "seccomp=unconfined"
+        "--security-opt", "apparmor=unconfined"
     ]
 }
