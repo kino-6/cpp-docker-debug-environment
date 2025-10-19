@@ -48,6 +48,17 @@ RUN pip3 install --no-cache-dir \
     pyocd \
     intelhex
 
+# Install Renode dependencies (lightweight approach)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Minimal Renode dependencies
+    mono-runtime \
+    libmono-system-windows-forms4.0-cil \
+    libmono-system-core4.0-cil \
+    libmono-corlib4.5-cil \
+    screen \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install GoogleTest for unit testing
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgtest-dev \

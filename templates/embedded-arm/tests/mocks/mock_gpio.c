@@ -26,31 +26,39 @@ void gpio_init(void)
     }
 }
 
-void gpio_set_pin(uint32_t pin, bool state)
+void gpio_set_pin(uint32_t gpio_base, uint8_t pin)
 {
     if (pin < MAX_GPIO_PINS) {
-        printf("[MOCK] gpio_set_pin(%u, %s)\n", pin, state ? "HIGH" : "LOW");
-        mock_gpio_pin_states[pin] = state;
+        printf("[MOCK] gpio_set_pin(0x%08X, %u) -> HIGH\n", gpio_base, pin);
+        mock_gpio_pin_states[pin] = true;
     }
 }
 
-void gpio_toggle_pin(uint32_t pin)
+void gpio_clear_pin(uint32_t gpio_base, uint8_t pin)
+{
+    if (pin < MAX_GPIO_PINS) {
+        printf("[MOCK] gpio_clear_pin(0x%08X, %u) -> LOW\n", gpio_base, pin);
+        mock_gpio_pin_states[pin] = false;
+    }
+}
+
+void gpio_toggle_pin(uint32_t gpio_base, uint8_t pin)
 {
     if (pin < MAX_GPIO_PINS) {
         mock_gpio_pin_states[pin] = !mock_gpio_pin_states[pin];
         mock_gpio_toggle_count[pin]++;
-        printf("[MOCK] gpio_toggle_pin(%u) -> %s (count: %u)\n", 
-               pin, mock_gpio_pin_states[pin] ? "HIGH" : "LOW", 
+        printf("[MOCK] gpio_toggle_pin(0x%08X, %u) -> %s (count: %u)\n", 
+               gpio_base, pin, mock_gpio_pin_states[pin] ? "HIGH" : "LOW", 
                mock_gpio_toggle_count[pin]);
     }
 }
 
-bool gpio_read_pin(uint32_t pin)
+uint8_t gpio_read_pin(uint32_t gpio_base, uint8_t pin)
 {
     if (pin < MAX_GPIO_PINS) {
-        return mock_gpio_pin_states[pin];
+        return mock_gpio_pin_states[pin] ? 1 : 0;
     }
-    return false;
+    return 0;
 }
 
 // Mock test helper functions

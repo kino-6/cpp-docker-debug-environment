@@ -45,7 +45,12 @@ void led_set(led_id_t led, led_state_t state)
         mock_led_states[led] = state;
         
         // Update GPIO pin state (mock)
-        gpio_set_pin(led_pins[led], state == LED_ON);
+        #define GPIOD_BASE 0x40020C00
+        if (state == LED_ON) {
+            gpio_set_pin(GPIOD_BASE, led_pins[led]);
+        } else {
+            gpio_clear_pin(GPIOD_BASE, led_pins[led]);
+        }
     }
 }
 
@@ -60,7 +65,8 @@ void led_toggle(led_id_t led)
                mock_led_toggle_counts[led]);
         
         // Update GPIO pin state (mock)
-        gpio_toggle_pin(led_pins[led]);
+        #define GPIOD_BASE 0x40020C00
+        gpio_toggle_pin(GPIOD_BASE, led_pins[led]);
     }
 }
 

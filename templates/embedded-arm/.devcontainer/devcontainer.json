@@ -29,7 +29,7 @@
         }
     },
     
-    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y bash-completion && sudo chsh -s /bin/bash vscode && echo 'ARM Embedded Dev Container ready! Bash with tab completion enabled.'",
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y bash-completion && sudo chsh -s /bin/bash vscode && chmod +x scripts/*.sh && ./scripts/install-renode.sh && echo 'ARM Embedded Dev Container with Renode ready!'",
     
     "remoteUser": "vscode",
     

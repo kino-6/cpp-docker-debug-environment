@@ -30,6 +30,84 @@
             }
         },
         {
+            "name": "Debug ARM Program (QEMU)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/integration/build/bin/DebugTestProgram.elf",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}/tests/integration",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "localhost:1234",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set architecture to ARM",
+                    "text": "-gdb-set architecture arm",
+                    "ignoreFailures": true
+                }
+            ],
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote localhost:1234"
+                }
+            ],
+            "launchCompleteCommand": "exec-continue",
+            "logging": {
+                "moduleLoad": false,
+                "trace": false,
+                "engineLogging": false,
+                "programOutput": true,
+                "exceptions": true
+            }
+        },
+        {
+            "name": "Debug Practical System (QEMU)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/integration/build/bin/PracticalEmbeddedSystem.elf",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}/tests/integration",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "localhost:1234",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set architecture to ARM",
+                    "text": "-gdb-set architecture arm",
+                    "ignoreFailures": true
+                }
+            ],
+            "customLaunchSetupCommands": [
+                {
+                    "text": "target remote localhost:1234"
+                }
+            ],
+            "launchCompleteCommand": "exec-continue",
+            "logging": {
+                "moduleLoad": false,
+                "trace": false,
+                "engineLogging": false,
+                "programOutput": true,
+                "exceptions": true
+            }
+        },
+        {
             "name": "Run Native Unit Tests",
             "type": "cppdbg",
             "request": "launch",

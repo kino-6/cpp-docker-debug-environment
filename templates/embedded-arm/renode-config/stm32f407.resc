@@ -1,0 +1,47 @@
+# Renode script for STM32F407VG simulation
+# This script sets up a complete STM32F407VG environment
+
+# Create machine
+mach create "stm32f407"
+
+# Load STM32F407 platform (use built-in platform)
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
+
+# Set up logging for better debugging
+logLevel 2
+
+# Configure semihosting
+machine SetSerialExecution true
+sysbus.cpu SetHookAtBlockBegin "Antmicro.Renode.Hooks.BlockBeginHookPythonEngine"
+
+# Enable semihosting
+sysbus.cpu EnableProfiler "Antmicro.Renode.Analyzers.SemihostingAnalyzer"
+
+# Set up GDB server
+machine StartGdbServer 1234
+
+# Configure UART for output (USART2 on STM32F407)
+connector Connect sysbus.usart2 Antmicro.Renode.Backends.Terminals.ServerSocketTerminal 3456
+
+# Macro to load and run binary
+macro reset
+"""
+    sysbus LoadELF $bin
+    cpu PC `sysbus GetSymbolAddress "Reset_Handler"`
+    cpu SP 0x20020000
+"""
+
+# Macro to run with binary
+macro run_binary
+"""
+    reset
+    start
+"""
+
+# Ready message
+echo "STM32F407VG Renode simulation ready"
+echo "Usage:"
+echo "  $bin = @/path/to/binary.elf"
+echo "  run_binary"
+echo "Or connect GDB to localhost:1234"
+echo "UART output available on localhost:3456"

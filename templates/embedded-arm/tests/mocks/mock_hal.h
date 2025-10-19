@@ -17,9 +17,10 @@ extern "C" {
 // Mock HAL functions
 void system_init(void);
 void gpio_init(void);
-void gpio_set_pin(uint32_t pin, bool state);
-void gpio_toggle_pin(uint32_t pin);
-bool gpio_read_pin(uint32_t pin);
+void gpio_set_pin(uint32_t gpio_base, uint8_t pin);
+void gpio_clear_pin(uint32_t gpio_base, uint8_t pin);
+void gpio_toggle_pin(uint32_t gpio_base, uint8_t pin);
+uint8_t gpio_read_pin(uint32_t gpio_base, uint8_t pin);
 void delay_ms(uint32_t ms);
 uint32_t get_system_tick(void);
 
