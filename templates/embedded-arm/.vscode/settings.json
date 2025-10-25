@@ -1,0 +1,103 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.generator": "Ninja",
+    "cmake.buildTask": true,
+    
+    // Test Explorer Configuration
+    "testMate.cpp.test.executables": [
+        {
+            "name": "Unit Tests",
+            "pattern": "tests/build/bin/UnitTestRunner{.exe,}",
+            "cwd": "${workspaceFolder}",
+            "env": {}
+        },
+        {
+            "name": "Integration Tests", 
+            "pattern": "tests/build/bin/IntegrationTestRunner{.exe,}",
+            "cwd": "${workspaceFolder}",
+            "env": {}
+        },
+        {
+            "name": "Performance Tests",
+            "pattern": "tests/build/bin/PerformanceTestRunner{.exe,}",
+            "cwd": "${workspaceFolder}",
+            "env": {}
+        },
+        {
+            "name": "Comprehensive Tests",
+            "pattern": "tests/build/bin/ComprehensiveTestRunner{.exe,}",
+            "cwd": "${workspaceFolder}",
+            "env": {}
+        }
+    ],
+    
+    // GoogleTest Configuration
+    "testMate.cpp.test.advancedExecutables": [
+        {
+            "name": "GoogleTest Suite",
+            "pattern": "tests/build/bin/*TestRunner{.exe,}",
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "gtest": {
+                "treatGmockFailureAsFatal": true,
+                "gmockVerbose": "info"
+            }
+        }
+    ],
+    
+    // Test Discovery
+    "testMate.cpp.discovery.loadOnStartup": true,
+    "testMate.cpp.discovery.gracePeriodForMissing": 10,
+    "testMate.cpp.discovery.retireDebounceLimit": 3,
+    
+    // Test Execution
+    "testMate.cpp.test.randomGeneratorSeed": null,
+    "testMate.cpp.test.runtimeLimit": 60,
+    "testMate.cpp.test.parallelExecutionLimit": 4,
+    
+    // Debug Configuration
+    "testMate.cpp.debug.configTemplate": {
+        "type": "cppdbg",
+        "MIMode": "gdb",
+        "miDebuggerPath": "/usr/bin/gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ]
+    },
+    
+    // File Associations
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp",
+        "*.tpp": "cpp"
+    },
+    
+    // Code Formatting
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_style": "{ BasedOnStyle: Google, IndentWidth: 4, ColumnLimit: 100 }",
+    
+    // IntelliSense Configuration
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.autocomplete": "default",
+    
+    // Embedded Development
+    "cortex-debug.gdbPath": "/usr/bin/gdb-multiarch",
+    "cortex-debug.armToolchainPath": "/usr/bin",
+    
+    // Terminal Configuration
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "/bin/bash",
+            "args": ["-l"]
+        }
+    }
+}

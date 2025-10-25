@@ -34,3 +34,27 @@ void mock_reset_system_state(void)
     mock_system_initialized = false;
     mock_system_clock = 0;
 }
+
+// Mock system tick
+static uint32_t mock_system_tick = 0;
+
+void delay_ms(uint32_t ms)
+{
+    printf("[MOCK] delay_ms(%u) called\n", ms);
+    mock_system_tick += ms;
+}
+
+uint32_t get_system_tick(void)
+{
+    return mock_system_tick;
+}
+
+void mock_advance_system_tick(uint32_t ticks)
+{
+    mock_system_tick += ticks;
+}
+
+void mock_reset_system_tick(void)
+{
+    mock_system_tick = 0;
+}

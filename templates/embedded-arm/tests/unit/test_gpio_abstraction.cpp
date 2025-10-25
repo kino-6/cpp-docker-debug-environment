@@ -37,11 +37,11 @@ TEST_F(GPIOAbstractionTest, PinSetTest) {
     gpio_init();
     
     // Test setting pin HIGH
-    gpio_set_pin(12, true);  // Green LED pin
+    gpio_set_pin(0x40020C00, 12);  // Green LED pin with GPIO base
     EXPECT_TRUE(mock_get_gpio_pin_state(12));
     
     // Test setting pin LOW
-    gpio_set_pin(12, false);
+    gpio_clear_pin(0x40020C00, 12);
     EXPECT_FALSE(mock_get_gpio_pin_state(12));
 }
 
@@ -54,12 +54,12 @@ TEST_F(GPIOAbstractionTest, PinToggleTest) {
     EXPECT_EQ(0, mock_get_gpio_toggle_count(14));
     
     // Toggle pin once
-    gpio_toggle_pin(14);
+    gpio_toggle_pin(0x40020C00, 14);
     EXPECT_TRUE(mock_get_gpio_pin_state(14));
     EXPECT_EQ(1, mock_get_gpio_toggle_count(14));
     
     // Toggle pin again
-    gpio_toggle_pin(14);
+    gpio_toggle_pin(0x40020C00, 14);
     EXPECT_FALSE(mock_get_gpio_pin_state(14));
     EXPECT_EQ(2, mock_get_gpio_toggle_count(14));
 }
@@ -69,11 +69,11 @@ TEST_F(GPIOAbstractionTest, PinReadTest) {
     gpio_init();
     
     // Set pin and read it back
-    gpio_set_pin(15, true);  // Blue LED pin
-    EXPECT_TRUE(gpio_read_pin(15));
+    gpio_set_pin(0x40020C00, 15);  // Blue LED pin
+    EXPECT_EQ(1, gpio_read_pin(0x40020C00, 15));
     
-    gpio_set_pin(15, false);
-    EXPECT_FALSE(gpio_read_pin(15));
+    gpio_clear_pin(0x40020C00, 15);
+    EXPECT_EQ(0, gpio_read_pin(0x40020C00, 15));
 }
 
 TEST_F(GPIOAbstractionTest, MultiplePinsTest) {
@@ -81,10 +81,10 @@ TEST_F(GPIOAbstractionTest, MultiplePinsTest) {
     gpio_init();
     
     // Test multiple pins simultaneously
-    gpio_set_pin(12, true);   // Green LED
-    gpio_set_pin(13, false);  // Orange LED
-    gpio_set_pin(14, true);   // Red LED
-    gpio_set_pin(15, false);  // Blue LED
+    gpio_set_pin(0x40020C00, 12);   // Green LED
+    gpio_clear_pin(0x40020C00, 13);  // Orange LED
+    gpio_set_pin(0x40020C00, 14);   // Red LED
+    gpio_clear_pin(0x40020C00, 15);  // Blue LED
     
     EXPECT_TRUE(mock_get_gpio_pin_state(12));
     EXPECT_FALSE(mock_get_gpio_pin_state(13));
@@ -96,12 +96,13 @@ TEST_F(GPIOAbstractionTest, ToggleCountAccuracyTest) {
     // Initialize GPIO first
     gpio_init();
     
-    const uint32_t pin = 12;
+    const uint32_t gpio_base = 0x40020C00;
+    const uint8_t pin = 12;
     const int toggle_count = 10;
     
     // Toggle pin multiple times
     for (int i = 0; i < toggle_count; i++) {
-        gpio_toggle_pin(pin);
+        gpio_toggle_pin(gpio_base, pin);
     }
     
     // Verify toggle count

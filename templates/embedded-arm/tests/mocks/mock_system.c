@@ -5,32 +5,48 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <unistd.h>
+#include <stdbool.h>
 
-// Mock delay function (non-blocking for tests)
-void delay_ms(uint32_t ms)
+// Mock system state
+static uint32_t mock_system_tick = 0;
+static bool mock_system_running = false;
+
+// Mock system functions
+void system_tick_handler(void)
 {
-    printf("[MOCK] delay_ms(%u) - simulated\n", ms);
-    // For unit tests, we don't actually delay
-    // In integration tests, we might use usleep(ms * 1000)
-    (void)ms; // Suppress unused parameter warning
+    printf("[MOCK] system_tick_handler() called\n");
+    mock_system_tick++;
 }
 
-// Mock system tick counter
-static volatile uint32_t mock_system_tick = 0;
+void system_start(void)
+{
+    printf("[MOCK] system_start() called\n");
+    mock_system_running = true;
+}
 
-uint32_t get_system_tick(void)
+void system_stop(void)
+{
+    printf("[MOCK] system_stop() called\n");
+    mock_system_running = false;
+}
+
+// Mock test helper functions
+uint32_t mock_get_system_tick_count(void)
 {
     return mock_system_tick;
 }
 
-void mock_advance_system_tick(uint32_t ticks)
+bool mock_is_system_running(void)
 {
-    mock_system_tick += ticks;
-    printf("[MOCK] System tick advanced by %u to %u\n", ticks, mock_system_tick);
+    return mock_system_running;
 }
 
-void mock_reset_system_tick(void)
+void mock_reset_system_tick_count(void)
 {
     mock_system_tick = 0;
+}
+
+void mock_set_system_running(bool running)
+{
+    mock_system_running = running;
 }

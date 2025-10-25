@@ -897,6 +897,112 @@
             "problemMatcher": []
         },
         {
+            "label": "Test: Simple Google Test",
+            "type": "shell",
+            "command": "./scripts/test-simple-googletest.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Google Test Setup",
+            "type": "shell",
+            "command": "./scripts/test-googletest-setup.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Unit Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target UnitTestRunner && ./build/bin/UnitTestRunner"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Integration Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target IntegrationTestRunner && ./build/bin/IntegrationTestRunner"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Performance Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target PerformanceTestRunner && ./build/bin/PerformanceTestRunner"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: All Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target ComprehensiveTestRunner && ./build/bin/ComprehensiveTestRunner"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Archive: Semihosting Debug Tests",
             "type": "shell",
             "command": "echo",

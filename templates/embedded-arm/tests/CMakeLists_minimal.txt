@@ -18,6 +18,8 @@ FetchContent_Declare(
 )
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 # Include GoogleTest utilities
@@ -28,12 +30,12 @@ include_directories(
     utils
 )
 
-# Simple test executable (only memory usage test to avoid dependencies)
+# Simple test executable (basic test without dependencies)
 add_executable(MinimalTestRunner
-    performance/test_memory_usage.cpp
+    simple_test.cpp
 )
 
-# Link GoogleTest
+# Link GoogleTest (without GMock)
 target_link_libraries(MinimalTestRunner
     gtest
     gtest_main
