@@ -1,0 +1,265 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // ========================================
+        // 🎯 MAIN TASKS (Production Use)
+        // ========================================
+        {
+            "label": "ARM: Fresh Configure & Build",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "System: Practical Test",
+            "type": "shell",
+            "command": "./scripts/test-practical-system.sh",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "GDB: Debug Test",
+            "type": "shell",
+            "command": "./scripts/test-gdb-debugging.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "LED: Visual Test",
+            "type": "shell",
+            "command": "./scripts/test-led-visual.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Test: Simple Google Test",
+            "type": "shell",
+            "command": "./scripts/test-simple-googletest.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+
+        // ========================================
+        // 🔧 UTILITY TASKS (Occasional Use)
+        // ========================================
+        {
+            "label": "ARM: Show Binary Info",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Binary Information ===' && arm-none-eabi-size build/bin/EmbeddedArmProject.elf && echo '=== Generated Files ===' && ls -la build/bin/"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOn": "ARM: Fresh Configure & Build"
+        },
+        {
+            "label": "ARM: Start QEMU Debug Server",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Starting QEMU Debug Server ===' && qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic -gdb tcp::1234 -S"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "isBackground": true,
+            "dependsOn": "ARM: Fresh Configure & Build"
+        },
+        {
+            "label": "Test: Run Native Unit Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && rm -rf build && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Running Unit Tests ===' && ls -la build/bin/ && ./build/bin/UnitTestRunner"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "Test: Unity Sample",
+            "type": "shell",
+            "command": "./scripts/test-unity-sample.sh",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup: Make Scripts Executable",
+            "type": "shell",
+            "command": "chmod",
+            "args": [
+                "+x",
+                "scripts/*.sh"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+
+        // ========================================
+        // 📁 ARCHIVED TASKS (Reference Only)
+        // ========================================
+        {
+            "label": "Archive: View Diagnostic Scripts",
+            "type": "shell",
+            "command": "echo",
+            "args": [
+                "Diagnostic scripts have been archived to scripts/archive/. Use 'ls scripts/archive/' to view available diagnostic tools. For production use, stick to the main tasks above."
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Archive: Run Diagnostic Script",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo 'Available diagnostic scripts:' && ls -1 scripts/archive/*.sh && echo '' && echo 'To run a diagnostic script:' && echo 'bash scripts/archive/[script-name].sh'"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}

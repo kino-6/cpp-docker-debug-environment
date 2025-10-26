@@ -32,6 +32,7 @@ echo "3. Creating GDB command scripts..."
 # Create comprehensive GDB test script
 cat > build/gdb_debug_test.txt << 'EOF'
 # GDB Debug Test Script
+set confirm off
 target remote localhost:1234
 
 # Display initial state
@@ -183,8 +184,9 @@ qemu-system-arm \
 QEMU_PID2=$!
 sleep 2
 
-# Create simple interactive test
+# Create simple non-interactive test
 cat > build/gdb_interactive_test.txt << 'EOF'
+set confirm off
 target remote localhost:1234
 break main
 continue
@@ -195,7 +197,7 @@ quit
 EOF
 
 echo "Running brief interactive test..."
-timeout 15s gdb-multiarch -x build/gdb_interactive_test.txt build/bin/DebugTestProgram.elf
+timeout 15s gdb-multiarch -batch -x build/gdb_interactive_test.txt build/bin/DebugTestProgram.elf
 
 # Kill second QEMU
 kill $QEMU_PID2 2>/dev/null

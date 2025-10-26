@@ -1,0 +1,66 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.default.compilerPath": "/opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin/xtensa-esp32-elf-gcc",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/opt/esp/idf/components/**",
+        "/opt/esp/idf/tools/**"
+    ],
+    "C_Cpp.default.defines": [
+        "ESP_PLATFORM",
+        "IDF_VER=\"v5.1.2\"",
+        "ESP32",
+        "FREERTOS"
+    ],
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.cppStandard": "c++17",
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.cpp": "cpp",
+        "*.hpp": "cpp",
+        "*.ino": "cpp",
+        "sdkconfig": "properties"
+    },
+    "files.exclude": {
+        "**/build": true,
+        "**/managed_components": true,
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/node_modules": true
+    },
+    "search.exclude": {
+        "**/build": true,
+        "**/managed_components": true,
+        "**/.git": true,
+        "**/node_modules": true
+    },
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.rulers": [
+        100
+    ],
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "cmake.configureOnOpen": false,
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "python.defaultInterpreterPath": "/opt/esp/python_env/idf5.1_py3.8_env/bin/python",
+    "idf.espIdfPath": "/opt/esp/idf",
+    "idf.toolsPath": "/opt/esp",
+    "idf.pythonBinPath": "/opt/esp/python_env/idf5.1_py3.8_env/bin/python",
+    "idf.gitPath": "/usr/bin/git",
+    "idf.port": "/dev/ttyUSB0",
+    "idf.baudRate": "115200",
+    "idf.openOcdConfigs": [
+        "board/esp32-wrover-kit-3.3v.cfg"
+    ],
+    "cortex-debug.gdbPath": "xtensa-esp32-elf-gdb",
+    "cortex-debug.openOCDPath": "openocd",
+    "hexeditor.columnWidth": 16,
+    "hexeditor.showDecodedText": true,
+    "git.ignoreLimitWarning": true,
+    "workbench.settings.editor": "json",
+    "idf.pythonInstallPath": "/usr/bin/python3"
+}

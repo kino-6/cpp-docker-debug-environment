@@ -1,0 +1,80 @@
+# Simplified QEMU Integration Tests for ARM Embedded Project
+cmake_minimum_required(VERSION 3.16)
+
+# ARM cross-compilation configuration
+set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR ARM)
+
+# Use ARM toolchain for integration tests
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
+
+# Prevent CMake from testing the compiler
+set(CMAKE_C_COMPILER_FORCED TRUE)
+set(CMAKE_CXX_COMPILER_FORCED TRUE)
+set(CMAKE_ASM_COMPILER_FORCED TRUE)
+
+# Project declaration
+project(EmbeddedArmIntegrationTests VERSION 1.0.0 LANGUAGES C CXX ASM)
+
+# ARM Cortex-M4 specific flags
+set(CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
+
+# Compiler flags for integration tests
+set(CMAKE_C_FLAGS "${CPU_FLAGS} -Wall -Wextra -Og -g3 -DINTEGRATION_TEST")
+set(CMAKE_CXX_FLAGS "${CPU_FLAGS} -Wall -Wextra -Og -g3 -DINTEGRATION_TEST -fno-exceptions -fno-rtti")
+set(CMAKE_ASM_FLAGS "${CPU_FLAGS} -x assembler-with-cpp")
+
+# Linker flags
+set(CMAKE_EXE_LINKER_FLAGS "${CPU_FLAGS} -specs=nosys.specs -Wl,--gc-sections")
+
+# Include directories
+include_directories(
+    ${CMAKE_SOURCE_DIR}/../../include
+    ${CMAKE_SOURCE_DIR}/../../src/hal
+    ${CMAKE_SOURCE_DIR}/../../src/drivers
+)
+
+# Linker script definition
+set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/../../linker/STM32F407VGTx_FLASH.ld)
+set(MINIMAL_LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/minimal.ld)
+
+# Create main test executables (essential ones only)
+
+# 1. Simple LED Test (visual confirmation)
+add_executable(SimpleLedTest.elf simple_led_test.c)
+set_target_properties(SimpleLedTest.elf PROPERTIES LINK_DEPENDS ${MINIMAL_LINKER_SCRIPT})
+target_link_options(SimpleLedTest.elf PRIVATE -T${MINIMAL_LINKER_SCRIPT} -nostdlib)
+set_target_properties(SimpleLedTest.elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 2. Practical Embedded System (comprehensive test)
+add_executable(PracticalEmbeddedSystem.elf practical_embedded_system.c)
+set_target_properties(PracticalEmbeddedSystem.elf PROPERTIES LINK_DEPENDS ${MINIMAL_LINKER_SCRIPT})
+target_link_options(PracticalEmbeddedSystem.elf PRIVATE -T${MINIMAL_LINKER_SCRIPT} -nostdlib)
+set_target_properties(PracticalEmbeddedSystem.elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 3. Debug Test Program (GDB debugging)
+add_executable(DebugTestProgram.elf debug_test_program.c)
+set_target_properties(DebugTestProgram.elf PROPERTIES LINK_DEPENDS ${MINIMAL_LINKER_SCRIPT})
+target_link_options(DebugTestProgram.elf PRIVATE -T${MINIMAL_LINKER_SCRIPT} -nostdlib)
+set_target_properties(DebugTestProgram.elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 4. Working Semihost Alternative (multiple output methods)
+add_executable(WorkingSemihostAlternative.elf working_semihost_alternative.c)
+set_target_properties(WorkingSemihostAlternative.elf PROPERTIES LINK_DEPENDS ${MINIMAL_LINKER_SCRIPT})
+target_link_options(WorkingSemihostAlternative.elf PRIVATE -T${MINIMAL_LINKER_SCRIPT} -nostdlib)
+set_target_properties(WorkingSemihostAlternative.elf PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Generate HEX and BIN files for main targets
+foreach(target SimpleLedTest.elf PracticalEmbeddedSystem.elf DebugTestProgram.elf WorkingSemihostAlternative.elf)
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND arm-none-eabi-objcopy -O ihex $<TARGET_FILE:${target}> ${CMAKE_BINARY_DIR}/bin/${target}.hex
+        COMMAND arm-none-eabi-objcopy -O binary $<TARGET_FILE:${target}> ${CMAKE_BINARY_DIR}/bin/${target}.bin
+        COMMAND arm-none-eabi-size $<TARGET_FILE:${target}>
+        COMMENT "Generating HEX and BIN files for ${target}"
+    )
+endforeach()
+
+# Enable compile commands for better IDE support
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

@@ -1,0 +1,79 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "ESP32: Debug with OpenOCD",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "xtensa-esp32-elf-gdb",
+            "miDebuggerServerAddress": "localhost:3333",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set target to remote",
+                    "text": "target remote localhost:3333",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "Load symbols",
+                    "text": "symbol-file ${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "Reset and halt target",
+                    "text": "monitor reset halt",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "Set breakpoint at app_main",
+                    "text": "break app_main",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "ESP32: Build",
+            "postDebugTask": "",
+            "logging": {
+                "engineLogging": false,
+                "programOutput": true,
+                "exceptions": true
+            }
+        },
+        {
+            "name": "ESP32: Attach to Running Process",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+            "MIMode": "gdb",
+            "miDebuggerPath": "xtensa-esp32-elf-gdb",
+            "miDebuggerServerAddress": "localhost:3333",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set target to remote",
+                    "text": "target remote localhost:3333",
+                    "ignoreFailures": false
+                },
+                {
+                    "description": "Load symbols",
+                    "text": "symbol-file ${workspaceFolder}/build/${workspaceFolderBasename}.elf",
+                    "ignoreFailures": false
+                }
+            ]
+        }
+    ]
+}

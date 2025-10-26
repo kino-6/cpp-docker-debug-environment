@@ -1,0 +1,24 @@
+# Minimal ESP32 Configuration for Low Memory Usage
+
+# Reduce bootloader log level
+CONFIG_BOOTLOADER_LOG_LEVEL_WARN=y
+CONFIG_BOOTLOADER_LOG_LEVEL=2
+
+# Reduce application log level
+CONFIG_LOG_DEFAULT_LEVEL_WARN=y
+CONFIG_LOG_DEFAULT_LEVEL=2
+
+# Disable unnecessary features
+CONFIG_ESP32_WIFI_ENABLED=n
+CONFIG_BT_ENABLED=n
+
+# Reduce memory usage
+CONFIG_ESP32_SPIRAM_SUPPORT=n
+CONFIG_FREERTOS_ASSERT_ON_UNTESTED_FUNCTION=n
+CONFIG_ESP32_DEFAULT_CPU_FREQ_160=y
+
+# Minimal partition table
+CONFIG_PARTITION_TABLE_SINGLE_APP=y
+
+# Reduce compiler optimizations for memory
+CONFIG_COMPILER_OPTIMIZATION_SIZE=y

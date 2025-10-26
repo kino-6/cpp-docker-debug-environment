@@ -1,9 +1,9 @@
 /**
  * @file debug_qemu_test.c
  * @brief Debug QEMU test with step-by-step execution tracking
+ * Note: Uses only semihosting, no standard library functions
  */
 
-#include <stdio.h>
 #include <stdint.h>
 
 // Semihosting system call numbers
@@ -39,6 +39,47 @@ static void debug_write_char(char c)
     semihosting_call(SYS_WRITEC, &c);
 }
 
+// Simple integer to string conversion
+static void debug_write_int(int value)
+{
+    if (value == 0) {
+        debug_write_char('0');
+        return;
+    }
+    
+    if (value < 0) {
+        debug_write_char('-');
+        value = -value;
+    }
+    
+    char buffer[12];  // Enough for 32-bit int
+    int pos = 0;
+    
+    while (value > 0) {
+        buffer[pos++] = '0' + (value % 10);
+        value /= 10;
+    }
+    
+    // Write digits in reverse order
+    for (int i = pos - 1; i >= 0; i--) {
+        debug_write_char(buffer[i]);
+    }
+}
+
+// Simple hex output
+static void debug_write_hex(uint32_t value)
+{
+    debug_write("0x");
+    for (int i = 28; i >= 0; i -= 4) {
+        int digit = (value >> i) & 0xF;
+        if (digit < 10) {
+            debug_write_char('0' + digit);
+        } else {
+            debug_write_char('A' + digit - 10);
+        }
+    }
+}
+
 // Simple startup with minimal vector table
 __attribute__((naked, noreturn))
 void Reset_Handler(void)
@@ -72,9 +113,9 @@ int main(void)
     debug_write_char('K');
     debug_write_char('\n');
     
-    // Step 3: Test printf
-    debug_write("STEP 3: Printf test starting...\n");
-    printf("Printf is working! This is a test message.\n");
+    // Step 3: Test integer output
+    debug_write("STEP 3: Integer output test starting...\n");
+    debug_write("Custom integer output is working!\n");
     
     // Step 4: Test basic operations
     debug_write("STEP 4: Basic operations test\n");
@@ -82,7 +123,13 @@ int main(void)
     volatile int b = 32;
     volatile int sum = a + b;
     
-    printf("Arithmetic test: %d + %d = %d\n", a, b, sum);
+    debug_write("Arithmetic test: ");
+    debug_write_int(a);
+    debug_write(" + ");
+    debug_write_int(b);
+    debug_write(" = ");
+    debug_write_int(sum);
+    debug_write("\n");
     
     if (sum == 42) {
         debug_write("Arithmetic test: PASSED\n");
@@ -99,21 +146,29 @@ int main(void)
         checksum ^= data[i];  // XOR checksum
     }
     
-    printf("Memory checksum: 0x%08lX\n", (unsigned long)checksum);
+    debug_write("Memory checksum: ");
+    debug_write_hex(checksum);
+    debug_write("\n");
     debug_write("Memory test: COMPLETED\n");
     
     // Step 6: Test ARM instructions
     debug_write("STEP 6: ARM instruction test\n");
     volatile uint32_t test_val = 0xAAAA5555;
-    printf("Original value: 0x%08lX\n", (unsigned long)test_val);
+    debug_write("Original value: ");
+    debug_write_hex(test_val);
+    debug_write("\n");
     
     // Bit reverse instruction
     __asm volatile ("rbit %0, %0" : "+r" (test_val));
-    printf("After RBIT: 0x%08lX\n", (unsigned long)test_val);
+    debug_write("After RBIT: ");
+    debug_write_hex(test_val);
+    debug_write("\n");
     
     // Reverse back
     __asm volatile ("rbit %0, %0" : "+r" (test_val));
-    printf("After second RBIT: 0x%08lX\n", (unsigned long)test_val);
+    debug_write("After second RBIT: ");
+    debug_write_hex(test_val);
+    debug_write("\n");
     
     if (test_val == 0xAAAA5555) {
         debug_write("ARM instruction test: PASSED\n");
@@ -124,7 +179,9 @@ int main(void)
     // Step 7: Controlled execution sequence
     debug_write("STEP 7: Controlled execution sequence\n");
     for (int i = 0; i < 5; i++) {
-        printf("Execution step %d/5\n", i + 1);
+        debug_write("Execution step ");
+        debug_write_int(i + 1);
+        debug_write("/5\n");
         
         // Short delay
         for (volatile int j = 0; j < 100000; j++) {
@@ -137,15 +194,15 @@ int main(void)
     
     // Step 8: Final test
     debug_write("STEP 8: Final test sequence\n");
-    printf("=== ALL TESTS COMPLETED ===\n");
-    printf("QEMU ARM Cortex-M4 simulation is working correctly!\n");
-    printf("Semihosting is functional.\n");
-    printf("Printf output is working.\n");
+    debug_write("=== ALL TESTS COMPLETED ===\n");
+    debug_write("QEMU ARM Cortex-M4 simulation is working correctly!\n");
+    debug_write("Semihosting is functional.\n");
+    debug_write("Custom output functions are working.\n");
     
     debug_write("=== DEBUG SUMMARY ===\n");
     debug_write("1. Direct semihosting: OK\n");
     debug_write("2. Character output: OK\n");
-    debug_write("3. Printf output: OK\n");
+    debug_write("3. Integer output: OK\n");
     debug_write("4. Arithmetic: OK\n");
     debug_write("5. Memory operations: OK\n");
     debug_write("6. ARM instructions: OK\n");
@@ -154,7 +211,7 @@ int main(void)
     
     // Step 9: Attempt clean exit
     debug_write("STEP 9: Attempting clean exit via semihosting\n");
-    printf("Attempting to exit cleanly...\n");
+    debug_write("Attempting to exit cleanly...\n");
     
     // Try semihosting exit
     int exit_code = 0;
@@ -162,11 +219,13 @@ int main(void)
     
     // If exit doesn't work, indicate and loop
     debug_write("Semihosting exit failed - entering controlled loop\n");
-    printf("Semihosting exit failed. Entering controlled loop.\n");
+    debug_write("Semihosting exit failed. Entering controlled loop.\n");
     
     // Controlled loop with periodic output
     for (int loop_count = 0; loop_count < 10; loop_count++) {
-        printf("Loop iteration %d/10\n", loop_count + 1);
+        debug_write("Loop iteration ");
+        debug_write_int(loop_count + 1);
+        debug_write("/10\n");
         debug_write_char('*');
         
         // Longer delay
@@ -176,7 +235,7 @@ int main(void)
     }
     
     debug_write("\nControlled loop completed. Program should terminate now.\n");
-    printf("Controlled loop completed. QEMU can be terminated.\n");
+    debug_write("Controlled loop completed. QEMU can be terminated.\n");
     
     // Final infinite loop
     while (1) {

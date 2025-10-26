@@ -1,0 +1,87 @@
+{
+    "name": "ESP32 IoT Development",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools-extension-pack",
+                "ms-vscode.cmake-tools",
+                "espressif.esp-idf-extension",
+                "ms-python.python",
+                "ms-python.pylint",
+                "redhat.vscode-yaml",
+                "ms-vscode.hexeditor",
+                "marus25.cortex-debug",
+                "webfreak.debug"
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+                "C_Cpp.default.intelliSenseMode": "gcc-x64",
+                "cmake.configureOnOpen": false,
+                "files.associations": {
+                    "*.h": "c",
+                    "*.c": "c",
+                    "*.cpp": "cpp",
+                    "*.hpp": "cpp"
+                },
+                "editor.formatOnSave": true,
+                "editor.tabSize": 4,
+                "editor.insertSpaces": true,
+                "python.defaultInterpreterPath": "/opt/esp/python_env/idf5.1_py3.8_env/bin/python",
+                "idf.espIdfPath": "/opt/esp/idf",
+                "idf.toolsPath": "/opt/esp",
+                "idf.pythonBinPath": "/opt/esp/python_env/idf5.1_py3.8_env/bin/python",
+                "idf.gitPath": "/usr/bin/git"
+            }
+        }
+    },
+
+    "forwardPorts": [
+        80,
+        443,
+        1883,
+        8080,
+        3000
+    ],
+
+    "portsAttributes": {
+        "80": {
+            "label": "ESP32 Web Server",
+            "onAutoForward": "notify"
+        },
+        "1883": {
+            "label": "MQTT Broker",
+            "onAutoForward": "ignore"
+        },
+        "8080": {
+            "label": "Development Server",
+            "onAutoForward": "notify"
+        }
+    },
+
+    "postCreateCommand": "echo '✅ PlatformIO ESP32 environment ready! Run: pio run'",
+
+    "remoteUser": "root",
+
+    "mounts": [
+        "source=esp32-cache,target=/opt/esp/.espressif,type=volume"
+    ],
+
+    "runArgs": [
+        "--privileged",
+        "--memory=4g",
+        "--memory-swap=8g"
+    ],
+
+    "containerEnv": {
+        "IDF_PATH": "/opt/esp/idf",
+        "IDF_TOOLS_PATH": "/opt/esp",
+        "PATH": "/opt/esp/python_env/idf5.1_py3.8_env/bin:/opt/esp/tools/xtensa-esp32-elf/esp-2022r1-11.2.0/xtensa-esp32-elf/bin:/opt/esp/tools/xtensa-esp32s2-elf/esp-2022r1-11.2.0/xtensa-esp32s2-elf/bin:/opt/esp/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin:/opt/esp/tools/riscv32-esp-elf/esp-2022r1-11.2.0/riscv32-esp-elf/bin:/opt/esp/tools/esp32ulp-elf/2.35_20220830/esp32ulp-elf/bin:/opt/esp/tools/cmake/3.24.0/bin:/opt/esp/tools/openocd-esp32/v0.12.0-esp32-20230921/openocd-esp32/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "PYTHONPATH": "/opt/esp/idf/tools:/opt/esp/idf/components/esptool_py/esptool:/opt/esp/idf/components/espcoredump:/opt/esp/idf/components/partition_table",
+        "TERM": "xterm-256color"
+    }
+}

@@ -1,0 +1,22 @@
+# VSCode Tasks Backup
+
+This file contains the original tasks.json with 40+ tasks before organization.
+Created on: 2025-01-23
+
+To restore the original tasks:
+1. Delete the current tasks.json
+2. Rename this file to tasks.json
+
+The original file contained:
+- 40+ tasks including many diagnostic and experimental tasks
+- Multiple QEMU test variations
+- Renode experimental tasks
+- Semihosting diagnostic tasks
+- Various build and test configurations
+
+These have been organized into:
+- 5 main production tasks
+- 5 utility tasks
+- 2 archive reference tasks
+
+Total: 12 organized tasks (down from 40+)

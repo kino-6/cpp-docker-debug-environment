@@ -1,119 +1,9 @@
 {
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "ARM: CMake Configure",
-            "type": "shell",
-            "command": "cmake",
-            "options": {
-                "shell": {
-                    "executable": "C:\\Program Files\\Git\\bin\\bash.exe",
-                    "args": ["-c"]
-                }
-            },
-            "args": [
-                "-B",
-                "build",
-                "-S",
-                ".",
-                "-G",
-                "Ninja",
-                "-DCMAKE_BUILD_TYPE=Debug",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "cmake",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": {
-                        "regexp": "^CMake Error at (.*):(\\d+)\\s+\\((.*)\\):$",
-                        "file": 1,
-                        "line": 2,
-                        "message": 3
-                    }
-                }
-            ]
-        },
-        {
-            "label": "ARM: CMake Build",
-            "type": "shell",
-            "command": "cmake",
-            "options": {
-                "shell": {
-                    "executable": "C:\\Program Files\\Git\\bin\\bash.exe",
-                    "args": ["-c"]
-                }
-            },
-            "args": [
-                "--build",
-                "build",
-                "--config",
-                "Debug",
-                "--parallel"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ],
-            "dependsOn": "ARM: CMake Configure"
-        },
-        {
-            "label": "ARM: Clean Build Directory",
-            "type": "shell",
-            "command": "rm",
-            "args": [
-                "-rf",
-                "build"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
+        // ========================================
+        // 🎯 MAIN TASKS (Production Use)
+        // ========================================
         {
             "label": "ARM: Fresh Configure & Build",
             "type": "shell",
@@ -155,707 +45,13 @@
             ]
         },
         {
-            "label": "ARM: Show Binary Info",
+            "label": "System: Practical Test",
             "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "echo '=== Binary Information ===' && arm-none-eabi-size build/bin/EmbeddedArmProject.elf && echo '=== Generated Files ===' && ls -la build/bin/"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "dependsOn": "ARM: CMake Build"
-        },
-        {
-            "label": "ARM: Test QEMU Execution",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "echo '=== Building ARM Project ===' && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel && echo '=== Testing QEMU Execution ===' && timeout 5s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic || echo 'QEMU test completed (timeout after 5 seconds)'"
-            ],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "ARM: Start QEMU Debug Server",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "echo '=== Starting QEMU Debug Server ===' && qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic -gdb tcp::1234 -S"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "isBackground": true,
-            "dependsOn": "ARM: Fresh Configure & Build"
-        },
-        {
-            "label": "Test: Build Native Unit Tests",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel"
-            ],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Test: Run Native Unit Tests",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests && rm -rf build && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Running Unit Tests ===' && ls -la build/bin/ && ./build/bin/UnitTestRunner"
-            ],
+            "command": "./scripts/test-practical-system.sh",
             "group": {
                 "kind": "test",
                 "isDefault": true
             },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "ARM: Test QEMU Execution (Simple)",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "echo '=== Building ARM Project ===' && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && cmake --build build --parallel && echo '=== Testing QEMU Execution ===' && timeout 5s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic || echo 'QEMU test completed (timeout after 5 seconds)'"
-            ],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Build Integration Tests",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests/integration && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Run Integration Tests",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests/integration && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Starting QEMU Integration Tests ===' && timeout 30s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/IntegrationTestRunner.elf -nographic -semihosting-config enable=on,target=native || echo 'QEMU integration test completed (timeout after 30 seconds)'"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Simple Test",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests/integration && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Starting Simple QEMU Test ===' && timeout 15s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/SimpleQemuTest.elf -nographic -semihosting-config enable=on,target=native || echo 'Simple QEMU test completed (timeout after 15 seconds)'"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Improved Test",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests/integration && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Starting Improved QEMU Test ===' && timeout 20s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/ImprovedQemuTest.elf -nographic -semihosting-config enable=on,target=native || echo 'Improved QEMU test completed (timeout after 20 seconds)'"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Debug Diagnostics",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "./scripts/debug-qemu.sh"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Working Test",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests/integration && rm -rf build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Starting Working QEMU Test ===' && timeout 25s qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/WorkingQemuTest.elf -nographic -semihosting-config enable=on,target=native || echo 'Working QEMU test completed (timeout after 25 seconds)'"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Debug Test",
-            "type": "shell",
-            "command": "./scripts/test-debug-qemu.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Alternative Machine Test",
-            "type": "shell",
-            "command": "./scripts/test-alternative-machines.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Setup: Make Scripts Executable",
-            "type": "shell",
-            "command": "chmod",
-            "args": [
-                "+x",
-                "scripts/*.sh"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "QEMU: Fixed Test",
-            "type": "shell",
-            "command": "./scripts/test-fixed-qemu.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Verbose Debug Test",
-            "type": "shell",
-            "command": "./scripts/test-qemu-verbose.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Minimal Semihost Test",
-            "type": "shell",
-            "command": "./scripts/test-minimal-semihost.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Basic Execution Test",
-            "type": "shell",
-            "command": "./scripts/test-basic-qemu.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Cortex-M Semihost Test",
-            "type": "shell",
-            "command": "./scripts/test-cortex-m-semihost.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "LED: Visual Test",
-            "type": "shell",
-            "command": "./scripts/test-led-visual.sh",
-            "group": "test",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -882,9 +78,9 @@
             "problemMatcher": []
         },
         {
-            "label": "System: Practical Test",
+            "label": "LED: Visual Test",
             "type": "shell",
-            "command": "./scripts/test-practical-system.sh",
+            "command": "./scripts/test-led-visual.sh",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -911,28 +107,56 @@
             },
             "problemMatcher": []
         },
+
+        // ========================================
+        // 🔧 UTILITY TASKS (Occasional Use)
+        // ========================================
         {
-            "label": "Test: Google Test Setup",
+            "label": "ARM: Show Binary Info",
             "type": "shell",
-            "command": "./scripts/test-googletest-setup.sh",
-            "group": "test",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== Binary Information ===' && arm-none-eabi-size build/bin/EmbeddedArmProject.elf && echo '=== Generated Files ===' && ls -la build/bin/"
+            ],
+            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": false
             },
-            "problemMatcher": []
+            "dependsOn": "ARM: Fresh Configure & Build"
         },
         {
-            "label": "Test: Unit Tests",
+            "label": "ARM: Start QEMU Debug Server",
             "type": "shell",
             "command": "bash",
             "args": [
                 "-c",
-                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target UnitTestRunner && ./build/bin/UnitTestRunner"
+                "echo '=== Starting QEMU Debug Server ===' && qemu-system-arm -M netduinoplus2 -cpu cortex-m4 -kernel build/bin/EmbeddedArmProject.elf -nographic -gdb tcp::1234 -S"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "isBackground": true,
+            "dependsOn": "ARM: Fresh Configure & Build"
+        },
+        {
+            "label": "Test: Run Native Unit Tests",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd tests && rm -rf build && mkdir -p build && cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug && cmake --build build --parallel && echo '=== Running Unit Tests ===' && ls -la build/bin/ && ./build/bin/UnitTestRunner"
             ],
             "group": "test",
             "presentation": {
@@ -941,18 +165,32 @@
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
+                "clear": false
             },
-            "problemMatcher": []
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": [
+                        "relative",
+                        "${workspaceFolder}"
+                    ],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
         },
         {
-            "label": "Test: Integration Tests",
+            "label": "Test: Unity Sample",
             "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target IntegrationTestRunner && ./build/bin/IntegrationTestRunner"
-            ],
+            "command": "./scripts/test-unity-sample.sh",
             "group": "test",
             "presentation": {
                 "echo": true,
@@ -965,49 +203,33 @@
             "problemMatcher": []
         },
         {
-            "label": "Test: Performance Tests",
+            "label": "Setup: Make Scripts Executable",
             "type": "shell",
-            "command": "bash",
+            "command": "chmod",
             "args": [
-                "-c",
-                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target PerformanceTestRunner && ./build/bin/PerformanceTestRunner"
+                "+x",
+                "scripts/*.sh"
             ],
-            "group": "test",
+            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
                 "panel": "shared",
                 "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": []
+                "clear": false
+            }
         },
+
+        // ========================================
+        // 📁 ARCHIVED TASKS (Reference Only)
+        // ========================================
         {
-            "label": "Test: All Tests",
-            "type": "shell",
-            "command": "bash",
-            "args": [
-                "-c",
-                "cd tests && CC=/usr/bin/cc CXX=/usr/bin/c++ cmake -B build -S . -G Ninja -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ && cmake --build build --target ComprehensiveTestRunner && ./build/bin/ComprehensiveTestRunner"
-            ],
-            "group": "test",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Archive: Semihosting Debug Tests",
+            "label": "Archive: View Diagnostic Scripts",
             "type": "shell",
             "command": "echo",
             "args": [
-                "Semihosting debug tests have been archived. See archive/semihosting-tests/README.md for details. ARM execution environment is fully functional with alternative output methods available."
+                "Diagnostic scripts have been archived to scripts/archive/. Use 'ls scripts/archive/' to view available diagnostic tools. For production use, stick to the main tasks above."
             ],
             "group": "test",
             "presentation": {
@@ -1021,308 +243,23 @@
             "problemMatcher": []
         },
         {
-            "label": "QEMU: Simple Working Test",
+            "label": "Archive: Run Diagnostic Script",
             "type": "shell",
-            "command": "./scripts/test-simple-working.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Renode: ARM Simulation Test",
-            "type": "shell",
-            "command": "./scripts/test-renode.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Renode: Simple Test (with QEMU fallback)",
-            "type": "shell",
-            "command": "./scripts/test-renode-simple.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Renode: Verbose Test",
-            "type": "shell",
-            "command": "./scripts/test-renode-verbose.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "Renode: Check Documentation",
-            "type": "shell",
-            "command": "./scripts/check-renode-docs.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Renode: Try Official Docker",
-            "type": "shell",
-            "command": "./scripts/try-official-renode-docker.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "Renode: Correct Configuration Test",
-            "type": "shell",
-            "command": "./scripts/test-renode-correct.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            }
-        },
-        {
-            "label": "ARM: Official Semihosting Test",
-            "type": "shell",
-            "command": "./scripts/test-official-semihost.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": true
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "label": "QEMU: Bare Metal Test",
-            "type": "shell",
-            "command": "./scripts/test-bare-metal-qemu.sh",
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": false
-            },
-            "problemMatcher": [
-                {
-                    "owner": "gcc",
-                    "fileLocation": [
-                        "relative",
-                        "${workspaceFolder}"
-                    ],
-                    "pattern": [
-                        {
-                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
-                            "file": 1,
-                            "line": 2,
-                            "column": 3,
-                            "severity": 4,
-                            "message": 5
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "type": "shell",
-            "label": "C/C++: arm-none-eabi-gcc build active file",
-            "command": "/usr/bin/arm-none-eabi-gcc",
+            "command": "bash",
             "args": [
-                "-mcpu=cortex-m4",
-                "-mthumb",
-                "-Wall",
-                "-Wextra",
-                "-Og",
-                "-g3",
-                "-fdiagnostics-color=always",
-                "-I${workspaceFolder}/include",
-                "-I${workspaceFolder}/src/hal",
-                "-I${workspaceFolder}/src/drivers",
-                "${file}",
-                "${workspaceFolder}/src/hal/system_init.c",
-                "${workspaceFolder}/src/hal/gpio.c", 
-                "${workspaceFolder}/src/drivers/led.c",
-                "${workspaceFolder}/src/startup/startup_stm32f4xx.s",
-                "-specs=nosys.specs",
-                "-T${workspaceFolder}/linker/STM32F407VGTx_FLASH.ld",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.elf"
+                "-c",
+                "echo 'Available diagnostic scripts:' && ls -1 scripts/archive/*.sh && echo '' && echo 'To run a diagnostic script:' && echo 'bash scripts/archive/[script-name].sh'"
             ],
-            "options": {
-                "cwd": "${workspaceFolder}"
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
             },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "detail": "ARM GCC build with all source files and linker script"
+            "problemMatcher": []
         }
     ]
 }

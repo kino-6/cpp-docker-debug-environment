@@ -76,10 +76,50 @@ Use our optimized build scripts for maximum performance:
 ./build-scripts/fast-build.sh --clean --jobs 0
 ```
 
+## 🎯 ARM組み込み開発環境 ⭐ **NEW!**
+
+### 4. ARM Embedded Project (`embedded-arm/`) ⭐ **推奨**
+- **Difficulty**: Intermediate-Advanced
+- **Description**: 本格的なARM Cortex-M4組み込み開発環境
+- **Features**:
+  - ARM Cortex-M4 (STM32F407VG) 対応
+  - QEMU実行環境 + GDBデバッグ
+  - リアルタイム割り込みシステム
+  - UART/GPIO/Timer制御
+  - Google Test + Unity テストフレームワーク
+  - 状態機械実装
+  - セミホスティング出力
+
+**プロダクションレベルの組み込み開発が可能です！**
+
+## 📚 詳細ドキュメント
+
+- **[🚀 クイックスタートガイド](QUICK_START_GUIDE.md)** - 5分で始める開発環境
+- **[🔧 ARM組み込み開発ガイド](embedded-arm/EMBEDDED_DEVELOPMENT_GUIDE.md)** - 組み込み開発の詳細
+- **[📋 ベストプラクティス](BEST_PRACTICES.md)** - 効率的な開発手法
+- **[🚨 トラブルシューティング](TROUBLESHOOTING.md)** - 問題解決ガイド
+- **[🧪 テストフレームワーク](embedded-arm/tests/README.md)** - テスト環境の使用方法
+
+## 🎯 対応環境
+
+### ✅ 完全対応済み
+- **基本C++開発**: Hello World、Calculator、JSON Parser
+- **ARM組み込み開発**: STM32F407VG、QEMU、リアルタイムシステム
+- **テストフレームワーク**: Google Test、Unity/CMock
+- **デバッグ環境**: GDB、VSCode統合、リモートデバッグ
+- **クロスプラットフォーム**: Windows/Linux/macOS
+
+### 🔄 開発中
+- **複数アーキテクチャ**: RISC-V、AVR、ESP32
+- **Autosar開発**: Classic/Adaptive Platform
+
 ## Next Steps
 
-These templates will be enhanced with:
-- Dev Container configurations (Phase 1, Task 2)
-- Docker environment setup (Phase 1, Task 3)
-- VSCode task configurations (Phase 1, Task 4)
-- Debug configurations (Phase 1, Task 5)
+✅ **完了済み**:
+- Dev Container configurations
+- Docker environment setup  
+- VSCode task configurations
+- Debug configurations
+- ARM embedded development environment
+- Test frameworks integration
+- Comprehensive documentation

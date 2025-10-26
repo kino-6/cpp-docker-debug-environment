@@ -1,0 +1,335 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        // ========================================
+        // 🎯 MAIN TASKS (Production Use)
+        // ========================================
+        {
+            "label": "ESP32: Build",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["build"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [
+                {
+                    "owner": "gcc",
+                    "fileLocation": ["relative", "${workspaceFolder}"],
+                    "pattern": [
+                        {
+                            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                            "file": 1,
+                            "line": 2,
+                            "column": 3,
+                            "severity": 4,
+                            "message": 5
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "label": "ESP32: Clean Build",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["clean", "build"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ESP32: Flash",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["-p", "/dev/ttyUSB0", "flash"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "ESP32: Build"
+        },
+        {
+            "label": "ESP32: Monitor",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["-p", "/dev/ttyUSB0", "monitor"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "ESP32: Build and Flash",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["build", "&&", "idf.py", "-p", "/dev/ttyUSB0", "flash"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ESP32: Build, Flash and Monitor",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py -p /dev/ttyUSB0 monitor"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+
+        // ========================================
+        // 🔧 CONFIGURATION TASKS
+        // ========================================
+        {
+            "label": "ESP32: Menu Config",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["menuconfig"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "ESP32: Size Analysis",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["size"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "ESP32: Build"
+        },
+        {
+            "label": "ESP32: Size Analysis (Detailed)",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["size-components"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "ESP32: Build"
+        },
+
+        // ========================================
+        // 🚀 DEVELOPMENT TASKS
+        // ========================================
+        {
+            "label": "ESP32: Erase Flash",
+            "type": "shell",
+            "command": "idf.py",
+            "args": ["-p", "/dev/ttyUSB0", "erase-flash"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ESP32: Check Ports",
+            "type": "shell",
+            "command": "ls",
+            "args": ["-la", "/dev/tty*"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ESP32: Chip Info",
+            "type": "shell",
+            "command": "esptool.py",
+            "args": ["--port", "/dev/ttyUSB0", "chip_id"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+
+        // ========================================
+        // 🧪 EXAMPLE TASKS
+        // ========================================
+        {
+            "label": "ESP32: Run WiFi LED Example",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd examples/wifi_led_control && idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py -p /dev/ttyUSB0 monitor"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "isBackground": true
+        },
+        {
+            "label": "ESP32: Run IoT Temperature Example",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "cd examples/iot_temperature && idf.py build && idf.py -p /dev/ttyUSB0 flash && idf.py -p /dev/ttyUSB0 monitor"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated"
+            },
+            "isBackground": true
+        },
+
+        // ========================================
+        // 🔍 DEBUG TASKS
+        // ========================================
+        {
+            "label": "ESP32: Start OpenOCD",
+            "type": "shell",
+            "command": "openocd",
+            "args": [
+                "-f", "board/esp32-wrover-kit-3.3v.cfg"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+
+        // ========================================
+        // 📊 ANALYSIS TASKS
+        // ========================================
+        {
+            "label": "ESP32: Memory Analysis",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== ESP32 Memory Analysis ===' && idf.py size && echo '' && echo '=== Component Sizes ===' && idf.py size-components"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOn": "ESP32: Build"
+        },
+        {
+            "label": "ESP32: Performance Test",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== ESP32 Performance Test ===' && time idf.py build && echo '' && echo 'Build completed. Check timing above.'"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+
+        // ========================================
+        // 🛠️ UTILITY TASKS
+        // ========================================
+        {
+            "label": "ESP32: Create New Project",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "read -p 'Enter project name: ' PROJECT_NAME && esp32-setup-project $PROJECT_NAME && echo 'Project created successfully!'"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "ESP32: Environment Info",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '=== ESP32 Development Environment ===' && echo 'IDF Version:' && idf.py --version && echo '' && echo 'Python Version:' && python3 --version && echo '' && echo 'Available Ports:' && ls -la /dev/tty* | grep -E '(USB|ACM)' && echo '' && echo 'ESP-IDF Path:' && echo $IDF_PATH"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}
